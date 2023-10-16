@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "summernote": "^0.8.20",
     "sweetalert2": "^11.7.32",
     "toastr": "^2.1.4"
   }

@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Filters\AdminAuth;
+use App\Filters\UserAuth;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -19,11 +21,13 @@ class Filters extends BaseConfig
      * @phpstan-var array<string, class-string>
      */
     public array $aliases = [
-        'csrf'          => CSRF::class,
-        'toolbar'       => DebugToolbar::class,
-        'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
+        'csrf' => CSRF::class,
+        'toolbar' => DebugToolbar::class,
+        'honeypot' => Honeypot::class,
+        'invalidchars' => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
+        'admin' => AdminAuth::class,
+        'user' => UserAuth::class
     ];
 
     /**
@@ -66,5 +70,18 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        'admin' => [
+            'before' => [
+                'AdmPanel',
+                'AdmPanel/*'
+            ]
+        ],
+        'user' => [
+            'before' => [
+                'Panel',
+                'Panel/*'
+            ]
+        ]
+    ];
 }

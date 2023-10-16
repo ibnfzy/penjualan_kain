@@ -22,7 +22,7 @@
                with font-awesome or any other icon font library -->
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="<?= base_url('AdmPanel/Produk'); ?>" class="nav-link">
             <i class="nav-icon fab fa-dropbox"></i>
             <p>
               Produk
@@ -34,7 +34,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-images"></i>
             <p>
-              Slider Foto <br> Halaman Utama
+              Slider Foto
             </p>
           </a>
         </li>

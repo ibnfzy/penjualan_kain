@@ -34,7 +34,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-images"></i>
             <p>
-              Slider Foto <br> Halaman Utama
+              Katalog Produk
             </p>
           </a>
         </li>
@@ -52,7 +52,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-users"></i>
             <p>
-              Customer
+              Testimoni
             </p>
           </a>
         </li>

@@ -20,10 +20,17 @@ class ProdukDetail extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50
             ],
+            'label_warna_produk' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50
+            ],
             'harga_produk' => [
                 'type' => 'INT'
             ],
-            'deskripsi_detail_produk' => [
+            'stok_produk' => [
+                'type' => 'INT'
+            ],
+            'gambar_produk' => [
                 'type' => 'TEXT'
             ]
         ]);

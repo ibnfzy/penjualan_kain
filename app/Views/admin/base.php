@@ -11,6 +11,14 @@
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="<?= base_url('') ?>plugins/fontawesome-free/css/all.min.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="<?= base_url('') ?>plugins/summernote/summernote-bs4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?= base_url('') ?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?= base_url('') ?>plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?= base_url('') ?>plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="<?= base_url('') ?>plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url('') ?>dist/css/adminlte.min.css">
 
@@ -78,6 +86,10 @@
   <script src="<?= base_url('') ?>/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="<?= base_url('') ?>/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="<?= base_url('') ?>/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <!-- Summernote -->
+  <script src="<?= base_url('') ?>plugins/summernote/summernote-bs4.min.js"></script>
+  <!-- bootstrap color picker -->
+  <script src="<?= base_url('') ?>plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
   <!-- ChartJS -->
   <script src="<?= base_url('') ?>plugins/chart.js/Chart.min.js"></script>
   <!-- AdminLTE App -->
@@ -86,44 +98,27 @@
   <script src="<?= base_url(''); ?>/jspdf/examples/libs/jspdf.umd.js"></script>
   <script src="<?= base_url(''); ?>/jspdf/dist/jspdf.plugin.autotable.js"></script>
 
-  <script>
-  $(function() {
-    $("#db_button").DataTable({
-      "responsive": true,
-      "lengthChange": false,
-      "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#datatable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-  toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "newestOnTop": true,
-    "progressBar": true,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": true,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  }
-  </script>
-
   <?= $this->renderSection('script'); ?>
+
+  <script>
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+  </script>
 
   <?php
   if (session()->getFlashdata('dataMessage')) {
@@ -137,6 +132,41 @@
       session()->getFlashdata('type-status') . '"]("' . session()->getFlashdata('message') . '")</script>';
   }
   ?>
+
+  <script>
+    $(function () {
+      $('#textarea').summernote({
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['fullscreen', 'codeview']]
+        ]
+      })
+
+      $("#db_button").DataTable({
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#datatable').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+
+
 </body>
 
 </html>
