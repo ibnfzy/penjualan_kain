@@ -43,6 +43,7 @@ $i = 1;
                 </div>
               </td>
               <td>
+                <button class="btn btn-info" onclick="modalVarian('<?= $item['id_produk']; ?>')">Tambah Varian</button>
                 <button class="btn" style="background: orange;" onclick="modalShow('<?= $item['id_produk']; ?>')">Detail
                   Produk</button>
                 <a href="<?= base_url('AdmPanel/Produk/' . $item['id_produk']); ?>" class="btn btn-primary">Edit</a>
@@ -54,6 +55,61 @@ $i = 1;
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="varian" tabindex="-1" role="dialog" aria-labelledby="uploadLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="penyerahanDesainLabel">Detail Produk</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="<?= base_url('AdmPanel/Produk/Single'); ?>" enctype="multipart/form-data" method="post">
+        <div class="modal-body">
+          <input type="hidden" name="id_produk" id="id_produk">
+
+          <div class="form-group">
+            <label for="">Warna Produk</label> <br>
+            <div class="col-sm-2">
+              <input type="color" name="warna_produk" class="form-control" id="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="">Label Nama Warna</label> <br>
+            <input type="text" name="label" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Harga Produk</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Rp</span>
+              </div>
+              <input type="number" class="form-control" name="harga_produk">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="">Stok Produk</label>
+            <input type="number" name="stok_produk" class="form-control" id="">
+          </div>
+
+          <div class="form-group">
+            <label for="">Gambar Produk</label>
+            <input type="file" name="gambar_produk" class="form-control" accept="image/*">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+          <button type="submit">Tambah</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -95,6 +151,12 @@ $i = 1;
 <?= $this->section('script'); ?>
 
 <script>
+function modalVarian(id = '') {
+
+  $('#id_produk').val(id)
+  $('#detail').modal('toggle')
+}
+
 function modalShow(id = '') {
 
   const xmlhttp = new XMLHttpRequest();
@@ -128,12 +190,12 @@ function modalShow(id = '') {
       </tr>
       `
     }
+
     document.getElementById("tbody").innerHTML = text;
     $('#detail').modal('toggle')
   }
 
   xmlhttp.open("GET", "<?= base_url('AdmPanel/Produk/Detail/'); ?>" + id);
-  // xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xmlhttp.send();
 }
 </script>

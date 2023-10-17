@@ -164,4 +164,40 @@ class Produk extends BaseController
         return redirect()->to(base_url('AdmPanel/Produk'))->with('type-status', 'success')
             ->with('message', 'Data berhasil ditambahkan');
     }
+
+    public function singleInsert()
+    {
+        $rules = [
+            'id_produk' => 'required',
+            'warna_produk' => 'required',
+            'label' => 'required',
+            'harga_produk' => 'required',
+            'stok_produk' => 'required',
+            'gambar_produk' => 'is_image[gambar_produk]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('AdmPanel/Produk'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $filename = $this->request->getFile('gambar_produk')->getRandomName();
+
+        $this->db->table('produk_detail')->insert([
+            'id_produk' => $this->request->getPost('id_produk'),
+            'warna_produk' => $this->request->getPost('warna_produk'),
+            'harga_produk' => $this->request->getPost('harga_produk'),
+            'stok_produk' => $this->request->getPost('stok_produk'),
+            'gambar_produk' => $filename,
+            'label_warna_produk' => $this->request->getPost('label')
+        ]);
+
+        $img = $this->request->getFile('gambar_produk');
+
+        if (!$img->hasMoved()) {
+            $img->move('uploads', $filename);
+        }
+
+        return redirect()->to(base_url('AdmPanel/Produk'))->with('type-status', 'success')
+            ->with('message', 'Data berhasil ditambahkan');
+    }
 }

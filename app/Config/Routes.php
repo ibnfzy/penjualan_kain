@@ -18,6 +18,8 @@ $routes->post('Daftar', 'UserLogin::save');
 $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($routes) {
 
   $routes->get('/', 'AdmController::index');
+  $routes->get('Transkasi', 'AdmController::transaksi');
+  $routes->get('Customer', 'AdmController::customer');
 
   $routes->get('Produk', 'Produk::index');
   $routes->get('Produk/Tambah', 'Produk::new');
@@ -27,7 +29,11 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($route
   $routes->get('Produk/Detail/(:num)', 'Produk::getDetail/$1');
   $routes->get('Produk/(:num)', 'Produk::edit/$1');
   $routes->post('Produk/(:num)', 'Produk::update/$1');
+  $routes->post('Produk/Single', 'Produk::singleInsert');
 
+  $routes->get('Corousel', 'Corousel::index');
+  $routes->post('Corousel', 'Corousel::create');
+  $routes->get('Corousel/(:num)', 'Corousel::delete/$1');
 });
 
 $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {

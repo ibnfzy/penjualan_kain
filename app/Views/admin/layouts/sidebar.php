@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4">
   <!-- Brand Logo -->
-  <a style="background-color: orange;" href="index3.html" class="brand-link">
+  <a style="background-color: orange;" href="<?= base_url('AdmPanel/'); ?>" class="brand-link">
     <i class="fas fa-home pl-2"></i>
     <span class="brand-text font-weight-bolder pl-2">Admin Panel</span>
   </a>
@@ -31,7 +31,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="<?= base_url('AdmPanel/Corousel'); ?>" class="nav-link">
             <i class="nav-icon fas fa-images"></i>
             <p>
               Slider Foto
@@ -40,7 +40,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="<?= base_url('AdmPanel/Transaksi'); ?>" class="nav-link">
             <i class="nav-icon fas fa-shopping-cart"></i>
             <p>
               Transaksi
@@ -49,7 +49,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="<?= base_url('AdmPanel/Customer'); ?>" class="nav-link">
             <i class="nav-icon fas fa-users"></i>
             <p>
               Customer
