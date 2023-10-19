@@ -7,6 +7,15 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+$routes->get('Katalog', 'Home::katalog');
+$routes->get('Katalog/(:num)', 'Home::detail/$1');
+
+$routes->get('Cart', 'Home::cart');
+$routes->get('Cart/Delete/(:segment)', 'Home::remove_barang/$1');
+$routes->get('Cart/Clear', 'Home::clear_cart');
+$routes->post('Cart/Update', 'Home::update_cart');
+$routes->post('Cart/Add', 'Home::add_barang');
+
 $routes->get('Adm/Login', 'AdminLogin::index');
 $routes->post('Adm/Login', 'AdminLogin::auth');
 

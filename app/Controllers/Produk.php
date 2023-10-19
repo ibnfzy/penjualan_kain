@@ -129,6 +129,8 @@ class Produk extends BaseController
             'deskripsi_produk' => $this->request->getPost('deskripsi_produk')
         ]);
 
+        $get = $this->db->table('produk_detail')->where('id_produk', $id)->get()->getResultArray();
+
         $id_detail = $this->request->getPost('id_detail');
         $warna = $this->request->getPost('warna_produk');
         $harga = $this->request->getPost('harga_produk');
@@ -136,7 +138,7 @@ class Produk extends BaseController
         $gambar = $this->request->getFileMultiple('gambar_produk');
         $label = $this->request->getPost('label');
 
-        for ($i = 0; $i < session()->get('jumlah_varian'); $i++) {
+        for ($i = 0; $i < count($get); $i++) {
 
             if ($gambar[$i]->isValid() && !$gambar[$i]->hasMoved()) {
                 $filename = $gambar[$i]->getRandomName();
