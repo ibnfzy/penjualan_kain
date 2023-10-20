@@ -15,7 +15,23 @@ class Home extends BaseController
 
     public function index(): string
     {
-        return view('web/home');
+        return view('web/home', [
+            'rekom' => $this->db->table('produk')->orderBy('id_produk', 'RAND()')->get()->getResultArray()
+        ]);
+    }
+
+    public function search()
+    {
+        $data = $this->db->table('produk')->like('nama_produk', $this->request->getPost('search'))->get()->getResultArray();
+
+        if ($data == null) {
+            return redirect()->to(previous_url())->with('type-status', 'error')
+                ->with('message', 'Data Tidak Ditemukan');
+        }
+
+        return view('web/katalog', [
+            'data' => $data
+        ]);
     }
 
     public function katalog()
@@ -28,7 +44,8 @@ class Home extends BaseController
     public function detail($id)
     {
         return view('web/detail', [
-            'data' => $this->db->table('produk')->where('id_produk', $id)->get()->getRowArray()
+            'data' => $this->db->table('produk')->where('id_produk', $id)->get()->getRowArray(),
+            'rekom' => $this->db->table('produk')->orderBy('id_produk', 'RAND()')->get()->getResultArray()
         ]);
     }
 
@@ -97,5 +114,72 @@ class Home extends BaseController
 
         return redirect()->to(base_url('Cart'))->with('type-status', 'success')
             ->with('message', 'Berhasil diperbaruhi');
+    }
+
+    public function review_star($id)
+    {
+        $get = $this->db->table('review')->where('id_produk', $id)->get()->getResultArray();
+
+        $rt = [];
+        $i = 1;
+
+        foreach ($get as $barang) {
+            $rt[] = $barang['bintang'];
+        }
+
+        $nilai = array_sum($rt);
+
+        $pbagi = count($rt);
+
+        try {
+            $rating = $nilai / $pbagi;
+        } catch (\Throwable $th) {
+            $rating = 0;
+        }
+
+        $nbulat = round($rating);
+        $nbulat = ($nbulat > 5) ? 5 : $nbulat;
+        $star = '';
+
+        if ($nbulat == 1) {
+            $star = '<i class="fa fa-star"></i>';
+
+        } else if ($nbulat == 2) {
+            $star = '<i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>';
+
+        } else if ($nbulat == 3) {
+            $star = '<i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>';
+
+        } else if ($nbulat == 4) {
+            $star = '<i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>';
+
+        } else if ($nbulat == 5) {
+            $star = '<i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>';
+
+        }
+
+        return $star;
+    }
+
+    public function total_review($id)
+    {
+        $get = $this->db->table('review')->where('id_produk', $id)->get()->getResultArray();
+
+        return count($get);
+    }
+
+    public function review($id)
+    {
+        return $this->db->table('review')->where('id_produk', $id)->get()->getResultArray();
     }
 }

@@ -1,6 +1,9 @@
 <?= $this->extend('web/base'); ?>
 
 <?= $this->section('content'); ?>
+<?php $db = \Config\Database::connect();
+$home = new \App\Controllers\Home;
+?>
 <!-- Main Slider Start -->
 <div class="header">
   <div class="container-fluid">
@@ -47,146 +50,45 @@
       <h1>Rekomendasi Produk</h1>
     </div>
     <div class="row align-items-center product-slider product-slider-4">
-      <div class="col-lg-3">
+      <?php foreach ($rekom as $item): ?>
+
+      <?php
+        $get = $db->table('produk_detail')->where('id_produk', $item['id_produk'])->orderBy('RAND()')->get(1)->getRowArray();
+        $getMaxHarga = $db->table('produk_detail')->selectMax('harga_produk', 'max_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
+        $getMinHarga = $db->table('produk_detail')->selectMin('harga_produk', 'min_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
+
+        $join = '<span>Rp</span>' . number_format($getMinHarga['min_harga'], 0, ',', '.') . '<span>-Rp</span>' . number_format($getMaxHarga['max_harga'], 0, ',', '.');
+        $harga = ($getMaxHarga['max_harga'] == $getMinHarga['min_harga']) ? '<span>Rp</span>' . number_format($getMaxHarga['max_harga'], 0, ',', '.') : $join;
+
+        $total_star = $home->review_star($item['id_produk']);
+        ?>
+
+      <div class="col-lg-3" style="max-width: 100%;">
         <div class="product-item">
           <div class="product-title">
-            <a href="<?= base_url() ?>#">Product Name</a>
+            <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+              <?= $item['nama_produk']; ?>
+            </a>
             <div class="ratting">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
+              <?= $total_star; ?>
             </div>
           </div>
           <div class="product-image">
-            <a href="<?= base_url() ?>product-detail.html">
-              <img src="<?= base_url() ?>img/product-1.jpg" alt="Product Image">
+            <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+              <img src="<?= base_url('uploads/' . $get['gambar_produk']) ?>" alt="Product Image">
             </a>
             <div class="product-action">
-              <a href="<?= base_url() ?>#"><i class="fa fa-cart-plus"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-heart"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-search"></i></a>
+              <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>"><i class="fa fa-eye"></i></a>
             </div>
           </div>
           <div class="product-price">
-            <h3><span>$</span>99</h3>
-            <a class="btn" href="<?= base_url() ?>"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+            <h3>
+              <?= $harga; ?>
+            </h3>
           </div>
         </div>
       </div>
-      <div class="col-lg-3">
-        <div class="product-item">
-          <div class="product-title">
-            <a href="<?= base_url() ?>#">Product Name</a>
-            <div class="ratting">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-            </div>
-          </div>
-          <div class="product-image">
-            <a href="<?= base_url() ?>product-detail.html">
-              <img src="<?= base_url() ?>img/product-2.jpg" alt="Product Image">
-            </a>
-            <div class="product-action">
-              <a href="<?= base_url() ?>#"><i class="fa fa-cart-plus"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-heart"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-search"></i></a>
-            </div>
-          </div>
-          <div class="product-price">
-            <h3><span>$</span>99</h3>
-            <a class="btn" href="<?= base_url() ?>"><i class="fa fa-shopping-cart"></i>Buy Now</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="product-item">
-          <div class="product-title">
-            <a href="<?= base_url() ?>#">Product Name</a>
-            <div class="ratting">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-            </div>
-          </div>
-          <div class="product-image">
-            <a href="<?= base_url() ?>product-detail.html">
-              <img src="<?= base_url() ?>img/product-3.jpg" alt="Product Image">
-            </a>
-            <div class="product-action">
-              <a href="<?= base_url() ?>#"><i class="fa fa-cart-plus"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-heart"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-search"></i></a>
-            </div>
-          </div>
-          <div class="product-price">
-            <h3><span>$</span>99</h3>
-            <a class="btn" href="<?= base_url() ?>"><i class="fa fa-shopping-cart"></i>Buy Now</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="product-item">
-          <div class="product-title">
-            <a href="<?= base_url() ?>#">Product Name</a>
-            <div class="ratting">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-            </div>
-          </div>
-          <div class="product-image">
-            <a href="<?= base_url() ?>product-detail.html">
-              <img src="<?= base_url() ?>img/product-4.jpg" alt="Product Image">
-            </a>
-            <div class="product-action">
-              <a href="<?= base_url() ?>#"><i class="fa fa-cart-plus"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-heart"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-search"></i></a>
-            </div>
-          </div>
-          <div class="product-price">
-            <h3><span>$</span>99</h3>
-            <a class="btn" href="<?= base_url() ?>"><i class="fa fa-shopping-cart"></i>Buy Now</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="product-item">
-          <div class="product-title">
-            <a href="<?= base_url() ?>#">Product Name</a>
-            <div class="ratting">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-            </div>
-          </div>
-          <div class="product-image">
-            <a href="<?= base_url() ?>product-detail.html">
-              <img src="<?= base_url() ?>img/product-5.jpg" alt="Product Image">
-            </a>
-            <div class="product-action">
-              <a href="<?= base_url() ?>#"><i class="fa fa-cart-plus"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-heart"></i></a>
-              <a href="<?= base_url() ?>#"><i class="fa fa-search"></i></a>
-            </div>
-          </div>
-          <div class="product-price">
-            <h3><span>$</span>99</h3>
-            <a class="btn" href="<?= base_url() ?>"><i class="fa fa-shopping-cart"></i>Buy Now</a>
-          </div>
-        </div>
-      </div>
+      <?php endforeach ?>
     </div>
   </div>
 </div>

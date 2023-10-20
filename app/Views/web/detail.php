@@ -9,6 +9,12 @@ $get = $db->table('produk_detail')->where('id_produk', $data['id_produk'])->get(
 
 $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])->get()->getFirstRow('array');
 
+$home = new \App\Controllers\Home;
+$star = $home->review_star($data['id_produk']);
+$total_star = $home->total_review($data['id_produk']);
+$review = $home->review($data['id_produk']);
+$pbagi = count($review);
+
 ?>
 
 <!-- Product Detail Start -->
@@ -22,14 +28,14 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
               <div class="col-md-5">
                 <div class="product-slider-single normal-slider">
                   <?php foreach ($get as $item): ?>
-                    <img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>" alt="Product Image">
+                  <img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>" alt="Product Image">
                   <?php endforeach ?>
 
                 </div>
                 <div class="product-slider-single-nav normal-slider">
                   <?php foreach ($get as $item): ?>
-                    <div class="slider-nav-img"><img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>"
-                        alt="Product Image"></div>
+                  <div class="slider-nav-img"><img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>"
+                      alt="Product Image"></div>
                   <?php endforeach ?>
 
                 </div>
@@ -44,11 +50,9 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
                       </h2>
                     </div>
                     <div class="ratting">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
+                      <?= $star; ?>
+                      (
+                      <?= $total_star; ?> )
                     </div>
                     <div class="price">
                       <h4>Price:</h4>
@@ -83,12 +87,12 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
                       <h4>Variasi Warna:</h4>
                       <div class="btn-group btn-group-sm">
                         <?php foreach ($get as $item): ?>
-                          <button type="button" class="btn warna" id="<?= $item['id_produk_detail']; ?>">
-                            <div
-                              style="height: 30px; width: 30px; border: 1px solid black; background-color: <?= $item['warna_produk'] ?>;">
-                            </div>
-                            <?= $item['label_warna_produk']; ?>
-                          </button>
+                        <button type="button" class="btn warna" id="<?= $item['id_produk_detail']; ?>">
+                          <div
+                            style="height: 30px; width: 30px; border: 1px solid black; background-color: <?= $item['warna_produk'] ?>;">
+                          </div>
+                          <?= $item['label_warna_produk']; ?>
+                        </button>
                         <?php endforeach ?>
                       </div>
                     </div>
@@ -106,65 +110,49 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
           <div class="col-lg-12">
             <ul class="nav nav-pills nav-justified">
               <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
+                <a class="nav-link active" data-toggle="pill" href="#description">Deskripsi Produk</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (1)</a>
+                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (
+                  <?= $total_star; ?> )
+                </a>
               </li>
             </ul>
 
             <div class="tab-content">
+
               <div id="description" class="container tab-pane active">
-                <h4>Product description</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In
-                  efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique
-                  viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus.
-                  Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque. Suspendisse sit amet neque
-                  neque. Praesent suscipit et magna eu iaculis. Donec arcu libero, commodo ac est a, malesuada finibus
-                  dolor. Aenean in ex eu velit semper fermentum. In leo dui, aliquet sit amet eleifend sit amet, varius
-                  in turpis. Maecenas fermentum ut ligula at consectetur. Nullam et tortor leo.
-                </p>
+                <!-- <h4>Product description</h4> -->
+                <?= $data['deskripsi_produk']; ?>
               </div>
+
               <div id="reviews" class="container tab-pane fade">
+
+                <?php foreach ($review as $item): ?>
+                <?php $getcustomer = $db->table('customer')->where('id_customer', $item['id_customer'])->get()->getRowArray(); ?>
                 <div class="reviews-submitted">
-                  <div class="reviewer">Phasellus Gravida - <span>01 Jan 2020</span></div>
+                  <div class="reviewer">
+                    <?= $getcustomer['fullname']; ?> - <span>
+                      <?= $item['insert_datetime']; ?>
+                    </span>
+                  </div>
                   <div class="ratting">
+                    <?php for ($i = 0; $i < $item['bintang']; $i++): ?>
                     <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
+                    <?php endfor ?>
                   </div>
                   <p>
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                    totam rem aperiam.
+                    <?= $item['deskripsi']; ?>
                   </p>
                 </div>
-                <div class="reviews-submit">
-                  <h4>Give your Review:</h4>
-                  <div class="ratting">
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                  </div>
-                  <div class="row form">
-                    <div class="col-sm-6">
-                      <input type="text" placeholder="Name">
-                    </div>
-                    <div class="col-sm-6">
-                      <input type="email" placeholder="Email">
-                    </div>
-                    <div class="col-sm-12">
-                      <textarea placeholder="Review"></textarea>
-                    </div>
-                    <div class="col-sm-12">
-                      <button>Submit</button>
-                    </div>
-                  </div>
+                <?php endforeach ?>
+
+                <?php if ($review == null): ?>
+                <div class="reviews-submitted">
+                  <p>Review Kosong</p>
                 </div>
+                <?php endif ?>
+
               </div>
             </div>
           </div>
@@ -176,146 +164,46 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
           </div>
 
           <div class="row align-items-center product-slider product-slider-4">
-            <div class="col-lg-3">
+            <?php foreach ($rekom as $item): ?>
+
+            <?php
+              $get = $db->table('produk_detail')->where('id_produk', $item['id_produk'])->orderBy('RAND()')->get(1)->getRowArray();
+              $getMaxHarga = $db->table('produk_detail')->selectMax('harga_produk', 'max_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
+              $getMinHarga = $db->table('produk_detail')->selectMin('harga_produk', 'min_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
+
+              $join = '<span>Rp</span>' . number_format($getMinHarga['min_harga'], 0, ',', '.') . '<span>-Rp</span>' . number_format($getMaxHarga['max_harga'], 0, ',', '.');
+              $harga = ($getMaxHarga['max_harga'] == $getMinHarga['min_harga']) ? '<span>Rp</span>' . number_format($getMaxHarga['max_harga'], 0, ',', '.') : $join;
+
+              $tost = $home->review_star($item['id_produk']);
+              ?>
+
+            <div class="col-lg-3" style="max-width: 100%;">
               <div class="product-item">
                 <div class="product-title">
-                  <a href="#">Product Name</a>
+                  <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+                    <?= $item['nama_produk']; ?>
+                  </a>
                   <div class="ratting">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
+                    <?= $tost; ?>
                   </div>
                 </div>
                 <div class="product-image">
-                  <a href="product-detail.html">
-                    <img src="<?= base_url('') ?>img/product-10.jpg" alt="Product Image">
+                  <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+                    <img src="<?= base_url('uploads/' . $get['gambar_produk']) ?>" alt="Product Image">
                   </a>
                   <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                    <a href="#"><i class="fa fa-search"></i></a>
+                    <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>"><i class="fa fa-eye"></i></a>
                   </div>
                 </div>
                 <div class="product-price">
-                  <h3><span>$</span>99</h3>
-                  <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                  <h3>
+                    <?= $harga; ?>
+                  </h3>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="product-item">
-                <div class="product-title">
-                  <a href="#">Product Name</a>
-                  <div class="ratting">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </div>
-                </div>
-                <div class="product-image">
-                  <a href="product-detail.html">
-                    <img src="<?= base_url('') ?>img/product-8.jpg" alt="Product Image">
-                  </a>
-                  <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                    <a href="#"><i class="fa fa-search"></i></a>
-                  </div>
-                </div>
-                <div class="product-price">
-                  <h3><span>$</span>99</h3>
-                  <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="product-item">
-                <div class="product-title">
-                  <a href="#">Product Name</a>
-                  <div class="ratting">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </div>
-                </div>
-                <div class="product-image">
-                  <a href="product-detail.html">
-                    <img src="<?= base_url('') ?>img/product-6.jpg" alt="Product Image">
-                  </a>
-                  <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                    <a href="#"><i class="fa fa-search"></i></a>
-                  </div>
-                </div>
-                <div class="product-price">
-                  <h3><span>$</span>99</h3>
-                  <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="product-item">
-                <div class="product-title">
-                  <a href="#">Product Name</a>
-                  <div class="ratting">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </div>
-                </div>
-                <div class="product-image">
-                  <a href="product-detail.html">
-                    <img src="<?= base_url('') ?>img/product-4.jpg" alt="Product Image">
-                  </a>
-                  <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                    <a href="#"><i class="fa fa-search"></i></a>
-                  </div>
-                </div>
-                <div class="product-price">
-                  <h3><span>$</span>99</h3>
-                  <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="product-item">
-                <div class="product-title">
-                  <a href="#">Product Name</a>
-                  <div class="ratting">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                  </div>
-                </div>
-                <div class="product-image">
-                  <a href="product-detail.html">
-                    <img src="<?= base_url('') ?>img/product-2.jpg" alt="Product Image">
-                  </a>
-                  <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                    <a href="#"><i class="fa fa-search"></i></a>
-                  </div>
-                </div>
-                <div class="product-price">
-                  <h3><span>$</span>99</h3>
-                  <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                </div>
-              </div>
-            </div>
+            <?php endforeach ?>
+
           </div>
         </div>
       </div>
@@ -329,29 +217,29 @@ $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])-
 <?= $this->section('script'); ?>
 
 <script>
-  listVarian = <?= json_encode($get); ?>;
+listVarian = <?= json_encode($get); ?>;
 
-  function search(nameKey = '', myArray) {
-    for (let i = 0; i < myArray.length; i++) {
-      if (myArray[i].id_produk_detail === nameKey) {
-        return myArray[i];
-      }
+function search(nameKey = '', myArray) {
+  for (let i = 0; i < myArray.length; i++) {
+    if (myArray[i].id_produk_detail === nameKey) {
+      return myArray[i];
     }
   }
+}
 
-  const formatter = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  });
+const formatter = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+});
 
-  $('.btn.warna').on('click', function (param) {
-    // console.log(param.target.id)
-    // console.log(listVarian)
-    res = search(param.target.id, listVarian);
+$('.btn.warna').on('click', function(param) {
+  // console.log(param.target.id)
+  // console.log(listVarian)
+  res = search(param.target.id, listVarian);
 
-    document.getElementById('stok').innerHTML = res.stok_produk;
-    document.getElementById('price').innerHTML = formatter.format(res.harga_produk);
-  });
+  document.getElementById('stok').innerHTML = res.stok_produk;
+  document.getElementById('price').innerHTML = formatter.format(res.harga_produk);
+});
 </script>
 
 <?= $this->endSection(); ?>

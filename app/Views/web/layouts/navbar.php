@@ -40,13 +40,15 @@
       </div>
       <div class="col-md-6">
         <div class="search">
-          <input type="text" placeholder="Cari berdasarkan nama produk">
-          <button><i class="fa fa-search"></i></button>
+          <form action="<?= base_url('Search'); ?>" method="POST">
+            <input type="text" placeholder="Cari berdasarkan nama produk" name="search">
+            <button><i class="fa fa-search"></i></button>
+          </form>
         </div>
       </div>
       <div class="col-md-3">
         <div class="user">
-          <a href="<?= base_url() ?>" class="btn cart">
+          <a href="<?= base_url('Cart') ?>" class="btn cart">
             <i class="fa fa-shopping-cart"></i>
             <span>(0)</span>
           </a>

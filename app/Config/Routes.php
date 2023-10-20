@@ -10,6 +10,8 @@ $routes->get('/', 'Home::index');
 $routes->get('Katalog', 'Home::katalog');
 $routes->get('Katalog/(:num)', 'Home::detail/$1');
 
+$routes->post('Search', 'Home::search');
+
 $routes->get('Cart', 'Home::cart');
 $routes->get('Cart/Delete/(:segment)', 'Home::remove_barang/$1');
 $routes->get('Cart/Clear', 'Home::clear_cart');
