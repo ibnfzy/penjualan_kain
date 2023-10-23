@@ -12,7 +12,7 @@
 
     <!-- Messages Dropdown Menu -->
     <li class="nav-item">
-      <a class="nav-link" href="#" role="button">
+      <a class="nav-link" href="<?= base_url('Logout'); ?>" role="button">
         <i class="fas fa-chevron-circle-left"></i> Keluar
       </a>
     </li>

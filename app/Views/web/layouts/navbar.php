@@ -16,8 +16,8 @@
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Akun</a>
             <div class="dropdown-menu">
-              <a href="<?= base_url() ?>#" class="dropdown-item">Login</a>
-              <a href="<?= base_url() ?>#" class="dropdown-item">Register</a>
+              <a href="<?= base_url('Login') ?>" class="dropdown-item">Login</a>
+              <a href="<?= base_url('Daftar') ?>" class="dropdown-item">Register</a>
             </div>
           </div>
         </div>

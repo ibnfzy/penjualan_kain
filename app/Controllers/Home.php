@@ -57,16 +57,18 @@ class Home extends BaseController
     public function add_barang()
     {
         $get = $this->db->table('produk_detail')->where('id_produk_detail', $this->request->getPost('id_produk_detail'))->get()->getRowArray();
+        // dd($this->request->getPost('id_produk_detail'));
 
         $getd = $this->db->table('produk')->where('id_produk', $get['id_produk'])->get()->getRowArray();
+
 
         $this->cart->insert([
             'id' => $get['id_produk'],
             'qty' => 1,
-            'price' => $get['harga'],
-            'name' => $getd['nama_barang'],
-            'gambar' => $get['gambar'],
-            'stok' => $get['stok']
+            'price' => $get['harga_produk'],
+            'name' => $getd['nama_produk'],
+            'gambar' => $get['gambar_produk'],
+            'stok' => $get['stok_produk']
         ]);
 
         return redirect()->to(base_url('Cart'));

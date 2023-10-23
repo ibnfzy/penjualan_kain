@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Filters\AdminAuth;
+use App\Filters\Login;
 use App\Filters\UserAuth;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
@@ -27,7 +28,8 @@ class Filters extends BaseConfig
         'invalidchars' => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'admin' => AdminAuth::class,
-        'user' => UserAuth::class
+        'user' => UserAuth::class,
+        'login' => Login::class,
     ];
 
     /**
@@ -81,6 +83,13 @@ class Filters extends BaseConfig
             'before' => [
                 'Panel',
                 'Panel/*'
+            ]
+        ],
+        'login' => [
+            'before' => [
+                'Adm/Login',
+                'Login',
+                'Daftar'
             ]
         ]
     ];

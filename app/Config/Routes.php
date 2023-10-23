@@ -25,6 +25,7 @@ $routes->get('Login', 'UserLogin::index');
 $routes->post('Login', 'UserLogin::auth');
 $routes->get('Daftar', 'UserLogin::signup');
 $routes->post('Daftar', 'UserLogin::save');
+$routes->get('Logout', 'UserLogin::logoff');
 
 $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($routes) {
 
@@ -51,5 +52,8 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
 
   $routes->get('/', 'UserController::index');
 
+  $routes->get('Transaksi', 'UserController::transaksi');
+  $routes->get('Transaksi/(:num)', 'UserController::invoice/$1');
 
+  $routes->get('Checkout', 'UserController::checkout');
 });

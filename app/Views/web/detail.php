@@ -5,7 +5,7 @@
 <?php
 $db = \Config\Database::connect();
 
-$get = $db->table('produk_detail')->where('id_produk', $data['id_produk'])->get()->getResultArray();
+$detailProduk = $db->table('produk_detail')->where('id_produk', $data['id_produk'])->get()->getResultArray();
 
 $getFirst = $db->table('produk_detail')->where('id_produk', $data['id_produk'])->get()->getFirstRow('array');
 
@@ -27,21 +27,22 @@ $pbagi = count($review);
             <div class="row align-items-center">
               <div class="col-md-5">
                 <div class="product-slider-single normal-slider">
-                  <?php foreach ($get as $item): ?>
+                  <?php foreach ($detailProduk as $item): ?>
                   <img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>" alt="Product Image">
                   <?php endforeach ?>
 
                 </div>
                 <div class="product-slider-single-nav normal-slider">
-                  <?php foreach ($get as $item): ?>
+                  <?php foreach ($detailProduk as $item): ?>
                   <div class="slider-nav-img"><img src="<?= base_url('uploads/' . $item['gambar_produk']) ?>"
                       alt="Product Image"></div>
                   <?php endforeach ?>
 
                 </div>
               </div>
-              <form action="" method="POST">
-                <input type="hidden" name="id_detail">
+              <form action="<?= base_url('Cart/Add'); ?>" method="POST">
+                <input type="hidden" name="id_produk_detail" id="id_produk_detail"
+                  value="<?= $getFirst['id_produk_detail']; ?>">
                 <div class="">
                   <div class="product-content">
                     <div class="title">
@@ -86,7 +87,7 @@ $pbagi = count($review);
                     <div class="p-color">
                       <h4>Variasi Warna:</h4>
                       <div class="btn-group btn-group-sm">
-                        <?php foreach ($get as $item): ?>
+                        <?php foreach ($detailProduk as $item): ?>
                         <button type="button" class="btn warna" id="<?= $item['id_produk_detail']; ?>">
                           <div
                             style="height: 30px; width: 30px; border: 1px solid black; background-color: <?= $item['warna_produk'] ?>;">
@@ -217,7 +218,7 @@ $pbagi = count($review);
 <?= $this->section('script'); ?>
 
 <script>
-listVarian = <?= json_encode($get); ?>;
+listVarian = <?= json_encode($detailProduk); ?>;
 
 function search(nameKey = '', myArray) {
   for (let i = 0; i < myArray.length; i++) {
@@ -225,7 +226,7 @@ function search(nameKey = '', myArray) {
       return myArray[i];
     }
   }
-}
+};
 
 const formatter = new Intl.NumberFormat('id-ID', {
   style: 'currency',
@@ -233,8 +234,9 @@ const formatter = new Intl.NumberFormat('id-ID', {
 });
 
 $('.btn.warna').on('click', function(param) {
-  // console.log(param.target.id)
-  // console.log(listVarian)
+  console.log(param.target.id)
+  console.log(listVarian)
+  $('#id_produk_detail').val(param.target.id);
   res = search(param.target.id, listVarian);
 
   document.getElementById('stok').innerHTML = res.stok_produk;
