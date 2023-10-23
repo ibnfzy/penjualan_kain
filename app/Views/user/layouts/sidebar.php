@@ -30,11 +30,13 @@
         </li>
 
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="<?= base_url('Panel/Cart'); ?>" class="nav-link">
             <i class="nav-icon fas fa-shopping-bag"></i>
             <p>
               Keranjang
-              <span class="badge badge-info right">0</span>
+              <span class="badge badge-info right">
+                <?= session()->get('total_keranjang'); ?>
+              </span>
             </p>
           </a>
         </li>

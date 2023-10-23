@@ -14,6 +14,8 @@ class UserController extends BaseController
     {
         $this->db = \Config\Database::connect();
         $this->cart = \Config\Services::cart();
+
+        session()->set('total_keranjang', count($this->db->table('keranjang')->select(new RawSql('DISTINCT rowid, COUNT(id) as total_produk, SUM(subtotal) as total_bayar'))->where('id_customer', session()->get('id_customer'))->get()->getResultArray()));
     }
 
     public function index()
@@ -21,11 +23,72 @@ class UserController extends BaseController
         return view('user/home');
     }
 
+    public function proses_keranjang($uid)
+    {
+        $data = $this->db->table('keranjang')
+            ->where('rowid', $uid)
+            ->get()->getResultArray();
+
+        foreach ($data as $key => $value) {
+            $getDetail = $this->db->table('produk_detail')->where('id_produk_detail', $value['id'])->get()->getRowArray();
+
+            $qty = ($value['qty'] > $getDetail['stok_produk']) ? $getDetail['stok_produk'] : $value['qty'];
+
+            if ($value['qty'] > $getDetail['stok_produk']) {
+                session()->set('stok_status', 'Tidak Mencukupi');
+            }
+
+            $this->cart->insert([
+                'id' => $value['id'],
+                'id_produk' => $value['id_produk'],
+                'qty' => $qty,
+                'price' => $getDetail['harga_produk'],
+                'name' => $value['name'],
+                'label_varian' => $value['label_varian'],
+                'gambar' => $getDetail['gambar_produk'],
+                'stok' => $getDetail['stok_produk'],
+                'id_customer' => $value['id_customer'],
+            ]);
+        }
+
+        $this->db->table('keranjang')->where('rowid', $uid)->delete();
+
+        return redirect()->to(base_url('Cart'))->with('type-status', 'success')
+            ->with('message', 'Berhasil proses keranjang');
+    }
+
+    public function hapus_keranjang($uid)
+    {
+        $this->db->table('keranjang')->where('rowid', $uid)->delete();
+
+        redirect()->to(base_url('Panel/Cart'))->with('type-status', 'success')
+            ->with('message', 'Berhasil menghapus keranjang');
+    }
+
     public function simpan_keranjang()
     {
+        helper('text');
         $home = new Home;
-        // dd($this->cart->contents());
-        $this->db->table('keranjang')->insertBatch($this->cart->contents());
+        $data = [];
+        $uid = random_string('alnum', 10);
+
+        foreach ($this->cart->contents() as $key => $value) {
+            $data[$key] = [
+                'id' => $value['id'],
+                'id_produk' => $value['id_produk'],
+                'qty' => $value['qty'],
+                'price' => $value['price'],
+                'name' => $value['name'],
+                'label_varian' => $value['label_varian'],
+                'gambar' => $value['gambar'],
+                'stok' => $value['stok'],
+                'id_customer' => $value['id_customer'],
+                'subtotal' => $value['subtotal'],
+                'rowid' => $uid
+            ];
+        }
+
+        $this->db->table('keranjang')->insertBatch($data);
 
         $home->clear_cart();
 
@@ -36,7 +99,7 @@ class UserController extends BaseController
     public function keranjang()
     {
         return view('user/cart', [
-            'data' => $this->db->table('keranjang')->select(new RawSql('DISTINCT rowid'))->where('id_customer', session()->get('id_customer'))->orderBy('rowid', 'DESC')->get()->getResultArray()
+            'data' => $this->db->table('keranjang')->select(new RawSql('DISTINCT rowid, COUNT(id) as total_produk, SUM(subtotal) as total_bayar'))->where('id_customer', session()->get('id_customer'))->orderBy('rowid', 'DESC')->get()->getResultArray()
         ]);
     }
 
@@ -63,7 +126,7 @@ class UserController extends BaseController
 
         $home = new Home;
 
-        if (isset($_SESSION['logged_in_cust']) and $_SESSION['logged_in_cust'] == TRUE) {
+        if (isset($_SESSION['logged_in_customer']) and $_SESSION['logged_in_customer'] == TRUE) {
             $q = 0;
             $get = [];
             $data = [];
@@ -113,7 +176,7 @@ class UserController extends BaseController
 
             return redirect()->to(base_url('Panel/Transaksi'));
         } else {
-            return redirect()->to(base_url('Login/User'))->with('type-status', 'error')
+            return redirect()->to(base_url('Login'))->with('type-status', 'error')
                 ->with('message', 'Silahkan Login Terlebih Dahulu');
         }
     }

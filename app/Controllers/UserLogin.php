@@ -67,7 +67,7 @@ class UserLogin extends BaseController
 
         $session->destroy();
 
-        return redirect()->to(base_url('Login/User'));
+        return redirect()->to(base_url('Login'));
     }
 
     public function signup()

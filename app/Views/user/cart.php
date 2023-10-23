@@ -24,16 +24,25 @@
           <tbody>
             <?php $i = 1; ?>
             <?php foreach ($data as $item): ?>
-            <tr>
-              <td>
-                <?= $i++; ?>
-              </td>
-              <td>
-                <?= $item['total_produk']; ?>
-              </td>
-              <td><a href="<?= base_url('Panel/Transaksi/' . $item['id_transaksi']); ?>"
-                  class="btn btn-danger">Invoice</a></td>
-            </tr>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['total_produk']; ?>
+                </td>
+                <td>Rp
+                  <?= number_format($item['total_bayar'], 0, ',', '.'); ?>
+                </td>
+                <td>
+                  <a href="<?= base_url('Panel/Cart/Delete/' . $item['rowid']); ?>" class="btn btn-danger">Hapus
+                    Keranjang</a>
+                </td>
+                <td>
+                  <a href="<?= base_url('Panel/Cart/' . $item['rowid']); ?>" class="btn btn-primary"
+                    onclick="alert('Data Keranjang ini akan diproses, dan tidak lagi disimpan')">Kelola</a>
+                </td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

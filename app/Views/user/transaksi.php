@@ -26,28 +26,28 @@
           <tbody>
             <?php $i = 1; ?>
             <?php foreach ($data as $item): ?>
-            <tr>
-              <td>
-                <?= $i++; ?>
-              </td>
-              <td>
-                <?= $item['total_produk']; ?>
-              </td>
-              <td>Rp.
-                <?= number_format($item['total_bayar'], 0, ',', '.'); ?>
-              </td>
-              <td>
-                <?= date('d M Y', strtotime($item['tgl_checkout'])); ?>
-              </td>
-              <td>
-                <?= date('d M Y', strtotime($item['batas_pembayaran'])); ?>
-              </td>
-              <td>
-                <?= $item['status_transaksi']; ?>
-              </td>
-              <td><a href="<?= base_url('Panel/Transaksi/' . $item['id_transaksi']); ?>"
-                  class="btn btn-danger">Invoice</a></td>
-            </tr>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['total_produk']; ?>
+                </td>
+                <td>Rp.
+                  <?= number_format($item['total_bayar'], 0, ',', '.'); ?>
+                </td>
+                <td>
+                  <?= date('d M Y', strtotime($item['tgl_checkout'])); ?>
+                </td>
+                <td>
+                  <?= date('d M Y', strtotime($item['batas_pembayaran'])); ?>
+                </td>
+                <td>
+                  <?= $item['status_transaksi']; ?>
+                </td>
+                <td><a href="<?= base_url('Panel/Transaksi/' . $item['id_transaksi']); ?>"
+                    class="btn btn-danger">Invoice</a></td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

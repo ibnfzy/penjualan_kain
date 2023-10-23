@@ -54,6 +54,8 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
 
   $routes->get('Cart/Simpan', 'UserController::simpan_keranjang');
   $routes->get('Cart', 'UserController::keranjang');
+  $routes->get('Cart/Delete/(:num)', 'UserController::hapus_keranjang');
+  $routes->get('Cart/(:segment)', 'UserController::proses_keranjang/$1');
 
   $routes->get('Transaksi', 'UserController::transaksi');
   $routes->get('Transaksi/(:num)', 'UserController::invoice/$1');
