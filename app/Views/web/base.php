@@ -34,6 +34,13 @@
 
   <?= $this->include('web/layouts/footer'); ?>
 
+  <div class="floating-button">
+    <a href="https://api.whatsapp.com/send?phone=1234567890" target="_blank">
+      <i class="fab fa-whatsapp fa-2x"></i>
+      <span class="text">Hubungi Kami</span>
+    </a>
+  </div>
+
   <!-- Back to Top -->
   <a href="<?= base_url() ?>#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
   <!-- JavaScript Libraries -->

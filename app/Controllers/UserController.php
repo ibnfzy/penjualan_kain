@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use CodeIgniter\Database\RawSql;
 
 class UserController extends BaseController
 {
@@ -18,6 +19,25 @@ class UserController extends BaseController
     public function index()
     {
         return view('user/home');
+    }
+
+    public function simpan_keranjang()
+    {
+        $home = new Home;
+        // dd($this->cart->contents());
+        $this->db->table('keranjang')->insertBatch($this->cart->contents());
+
+        $home->clear_cart();
+
+        return redirect()->to(base_url('Panel/Cart'))->with('type-status', 'success')
+            ->with('message', 'Berhasil menyimpan keranjang');
+    }
+
+    public function keranjang()
+    {
+        return view('user/cart', [
+            'data' => $this->db->table('keranjang')->select(new RawSql('DISTINCT rowid'))->where('id_customer', session()->get('id_customer'))->orderBy('rowid', 'DESC')->get()->getResultArray()
+        ]);
     }
 
     public function transaksi()

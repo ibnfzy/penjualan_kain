@@ -15,6 +15,8 @@
                 <thead class="thead-dark">
                   <tr>
                     <th>Produk</th>
+                    <th>Varian</th>
+                    <th>Stok</th>
                     <th>Harga</th>
                     <th>Kuantitas</th>
                     <th>Total</th>
@@ -24,7 +26,7 @@
                 <tbody class="align-middle">
                   <?php if ($cart->contents() == null): ?>
                   <tr>
-                    <td colspan="5">Keranjang Kosong</td>
+                    <td colspan="6">Keranjang Kosong</td>
                   </tr>
                   <?php endif;
                   $total = [];
@@ -39,18 +41,26 @@
                       <div class="img">
                         <a href="#"><img src="<?= base_url('uploads/' . $data['gambar']); ?>" alt="Image"></a>
                         <p>
-                          <?= $data['name']; ?>
+                          <a href="<?= base_url('Katalog/'.$data['id_produk']) ;?>">
+                            <?= $data['name']; ?>
+                          </a>
                         </p>
                       </div>
+                    </td>
+                    <td>
+                      <?= $data['label_varian'] ?? ''; ?>
+                    </td>
+                    <td>
+                      <?= $data['stok']; ?>
                     </td>
                     <td>Rp.
                       <?= number_format($data['price'], 0, ',', '.'); ?>
                     </td>
                     <td>
                       <div class="qty">
-                        <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                        <input type="text" value="<?= $data['qty']; ?>">
-                        <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn-minus"><i class="fa fa-minus"></i></button>
+                        <input type="text" value="<?= $data['qty']; ?>" name="qtybutton[<?= $i; ?>]">
+                        <button type="button" class="btn-plus"><i class="fa fa-plus"></i></button>
                       </div>
                     </td>
                     <td>Rp.
@@ -73,21 +83,27 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="coupon">
-                  <input type="text" placeholder="Coupon Code">
-                  <button>Apply Code</button>
+                  <a class="btn btn-outlined-danger p-3" href="<?= base_url('Panel/Cart/Simpan'); ?>">Simpan
+                    Keranjang</a>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="cart-summary">
                   <div class="cart-content">
-                    <h1>Cart Summary</h1>
-                    <p>Sub Total<span>$99</span></p>
-                    <p>Shipping Cost<span>$1</span></p>
-                    <h2>Grand Total<span>$100</span></h2>
+                    <h1>Detail Keranjang</h1>
+                    <p>Sub Total<span>Rp
+                        <?= number_format(array_sum($total), 0, ',', '.'); ?>
+                      </span></p>
+                    <p>Biaya Pengiriman<span>Rp
+                        <?= number_format(40000, 0, ',', '.'); ?>
+                      </span></p>
+                    <h2>Grand Total<span>Rp
+                        <?= number_format(array_sum($total) + 40000, 0, ',', '.'); ?>
+                      </span></h2>
                   </div>
                   <div class="cart-btn">
                     <button type="submit">Update Cart</button>
-                    <a href="">Checkout</a>
+                    <a class="btn btn-outlined-danger p-3" href="">Checkout</a>
                   </div>
                 </div>
               </div>

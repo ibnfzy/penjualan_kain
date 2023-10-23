@@ -57,18 +57,24 @@ class Home extends BaseController
     public function add_barang()
     {
         $get = $this->db->table('produk_detail')->where('id_produk_detail', $this->request->getPost('id_produk_detail'))->get()->getRowArray();
-        // dd($this->request->getPost('id_produk_detail'));
 
         $getd = $this->db->table('produk')->where('id_produk', $get['id_produk'])->get()->getRowArray();
 
+        if ($this->request->getPost('qty') > $get['stok_produk']) {
+            return redirect()->to(previous_url())->with('type-status', 'error')
+                ->with('message', 'Stok Tidak Mencukupi, silahkan hubungi toko');
+        }
 
         $this->cart->insert([
-            'id' => $get['id_produk'],
-            'qty' => 1,
+            'id' => $get['id_produk_detail'],
+            'id_produk' => $get['id_produk'],
+            'qty' => $this->request->getPost('qty'),
             'price' => $get['harga_produk'],
             'name' => $getd['nama_produk'],
+            'label_varian' => $get['label_warna_produk'],
             'gambar' => $get['gambar_produk'],
-            'stok' => $get['stok_produk']
+            'stok' => $get['stok_produk'],
+            'id_customer' => session()->get('id_customer')
         ]);
 
         return redirect()->to(base_url('Cart'));
@@ -97,7 +103,7 @@ class Home extends BaseController
         $stok = $this->request->getPost('stok');
         $status = true;
 
-        for ($i = 1; $i <= count($this->cart->contents()); $i++) {
+        for ($i = 0; $i < count($this->cart->contents()); $i++) {
             if ($qty[$i] > $stok[$i]) {
                 $status = false;
                 break;

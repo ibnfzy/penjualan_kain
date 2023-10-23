@@ -1,4 +1,5 @@
 <!-- Nav Bar Start -->
+<?php $cart = \Config\Services::cart(); ?>
 <div class="nav">
   <div class="container-fluid">
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -50,7 +51,9 @@
         <div class="user">
           <a href="<?= base_url('Cart') ?>" class="btn cart">
             <i class="fa fa-shopping-cart"></i>
-            <span>(0)</span>
+            <span>(
+              <?= $cart->totalItems(); ?> )
+            </span>
           </a>
         </div>
       </div>

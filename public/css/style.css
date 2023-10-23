@@ -2404,3 +2404,41 @@ h2 {
         text-align: center; 
     } 
 }
+
+
+/* styles.css */
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #25d366;
+  border-radius: 8%; /* Mengubah radius ke 50% untuk membuat kotak bulat */
+  width: 154px;
+  height: 45px;
+  text-align: center;
+  box-shadow: 0px 0px 5px #888;
+}
+
+.floating-button a {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.floating-button img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px 0 0;
+}
+
+.floating-button i {
+    color: white;
+}
+
+.floating-button .text {
+  font-size: 14px;
+  color: white;
+}
