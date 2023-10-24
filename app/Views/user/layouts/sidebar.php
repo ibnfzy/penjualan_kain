@@ -59,6 +59,15 @@
           </a>
         </li>
 
+        <li class="nav-item bg-success">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fab fa-whatsapp"></i>
+            <p>
+              Hubungi Toko
+            </p>
+          </a>
+        </li>
+
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

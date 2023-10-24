@@ -19,6 +19,9 @@ class TransaksiDetail extends Migration
             'id_produk' => [
                 'type' => 'INT'
             ],
+            'id_produk_detail' => [
+                'type' => 'INT'
+            ],
             'id_customer' => [
                 'type' => 'INT'
             ],
@@ -26,10 +29,17 @@ class TransaksiDetail extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50
             ],
+            'label_varian' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50
+            ],
             'kuantitas_produk' => [
                 'type' => 'INT'
             ],
             'harga_produk' => [
+                'type' => 'INT'
+            ],
+            'subtotal' => [
                 'type' => 'INT'
             ]
         ]);

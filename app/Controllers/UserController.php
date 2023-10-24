@@ -15,7 +15,11 @@ class UserController extends BaseController
         $this->db = \Config\Database::connect();
         $this->cart = \Config\Services::cart();
 
-        session()->set('total_keranjang', count($this->db->table('keranjang')->select(new RawSql('DISTINCT rowid, COUNT(id) as total_produk, SUM(subtotal) as total_bayar'))->where('id_customer', session()->get('id_customer'))->get()->getResultArray()));
+        $data = $this->db->table('keranjang')->select(new RawSql('DISTINCT rowid, COUNT(id) as total_produk, SUM(subtotal) as total_bayar'))->where('id_customer', session()->get('id_customer'))->get()->getResultArray();
+
+        $lengthData = ($data[0]['total_produk'] == 0 && $data[0]['rowid'] == null) ? [] : $data;
+
+        session()->set('total_keranjang', count($lengthData));
     }
 
     public function index()
@@ -115,7 +119,7 @@ class UserController extends BaseController
         return view('user/invoice', [
             'dataTransaksi' => $this->db->table('transaksi')->where('id_transaksi', $id)->get()->getRowArray(),
             'dataDetail' => $this->db->table('transaksi_detail')->where('id_transaksi', $id)->get()->getResultArray(),
-            'dataToko' => $this->db->table('toko_informasi')->where('id_toko', '1')->get()->getRowArray(),
+            'dataToko' => $this->db->table('informasi_toko')->where('id_toko', '1')->get()->getRowArray(),
             'dataUser' => $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->get()->getRowArray()
         ]);
     }
@@ -131,42 +135,48 @@ class UserController extends BaseController
             $get = [];
             $data = [];
             $hargaarr = [];
+            $uid = random_string();
 
             foreach ($this->cart->contents() as $item) {
-                $produk = $this->db->table('produk')->where('id_produk', $item['id'])->get()->getRowArray();
+                $produk = $this->db->table('produk_detail')->where('id_produk_detail', $item['id'])->get()->getRowArray();
 
                 $get[] = $produk;
+                $get[$q]['nama_produk'] = $item['name'];
                 $get[$q]['qty'] = $item['qty'];
                 $get[$q]['total_harga'] = $item['qty'] * $item['price'];
-                $stok = $produk['stok'] - $item['qty'];
+                $stok = $produk['stok_produk'] - $item['qty'];
                 $hargaarr[] = $item['qty'] * $item['price'];
 
-                $this->db->table('produk')->where('id_produk', $item['id'])->update([
-                    'stok' => $stok
+                $this->db->table('produk_detail')->where('id_produk_detail', $item['id'])->update([
+                    'stok_produk' => $stok
                 ]);
 
                 $q++;
             }
 
             $dataTransaksi = [
+                'uid' => $uid,
                 'id_customer' => session()->get('id_customer'),
-                'total_items' => count($get),
+                'total_produk' => count($get),
                 'total_bayar' => array_sum($hargaarr),
                 'batas_pembayaran' => date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 Days')),
                 'status_transaksi' => 'Menunggu Bukti Pembayaran'
             ];
 
             $this->db->table('transaksi')->insert($dataTransaksi);
-            $getLastID = $this->db->query('SELECT (LAST_INSERT_ID()) as id')->getRowArray();
+            $getTransaksi = $this->db->table('transaksi')->where('uid', $uid)->get()->getRowArray();
 
             foreach ($get as $item) {
                 $data[] = [
-                    'id_transaksi' => $getLastID['id'],
+                    'id_transaksi' => $getTransaksi['id_transaksi'],
                     'id_produk' => $item['id_produk'],
+                    'id_produk_detail' => $item['id_produk_detail'],
                     'id_customer' => session()->get('id_customer'),
                     'nama_produk' => $item['nama_produk'],
                     'kuantitas_produk' => $item['qty'],
-                    'harga_produk' => $item['total_harga'],
+                    'harga_produk' => $item['harga_produk'],
+                    'label_varian' => $item['label_warna_produk'],
+                    'subtotal' => $item['total_harga']
                 ];
             }
 
@@ -179,5 +189,40 @@ class UserController extends BaseController
             return redirect()->to(base_url('Login'))->with('type-status', 'error')
                 ->with('message', 'Silahkan Login Terlebih Dahulu');
         }
+    }
+
+    public function upload_bukti($id)
+    {
+        $rules = [
+            'gambar' => 'is_image[gambar]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(previous_url())->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $filename = $this->request->getFile('gambar')->getRandomName();
+
+        $this->db->table('transaksi')->where('id_transaksi', $id)->update([
+            'bukti_bayar' => $filename,
+            'status_transaksi' => 'Menunggu Validasi Bukti Bayar'
+        ]);
+
+        if (!$this->request->getFile('gambar')->hasMoved()) {
+            $this->request->getFile('gambar')->move('uploads', $filename);
+        }
+
+        return redirect()->to(previous_url())->with('type-status', 'success')
+            ->with('message', 'Bukti pembayaran berhasil diupload');
+    }
+
+    public function konfirmasi_pesanan($id)
+    {
+        $this->db->table('transaksi')->where('id_transaksi', $id)->update([
+            'status_transaksi' => 'Pesanan berhasil diterima oleh pemesan'
+        ]);
+
+        return redirect()->to(previous_url())->with('type-status', 'success')
+            ->with('message', 'Pesanan berhasil dikirim');
     }
 }

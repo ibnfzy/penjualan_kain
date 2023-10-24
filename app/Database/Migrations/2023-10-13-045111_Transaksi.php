@@ -14,6 +14,9 @@ class Transaksi extends Migration
                 'type' => 'INT',
                 'auto_increment' => true
             ],
+            'uid' => [
+                'type' => 'TEXT'
+            ],
             'id_customer' => [
                 'type' => 'INT'
             ],

@@ -1,4 +1,4 @@
-<?= $this->extend('user/base'); ?>
+<?= $this->extend('admin/base'); ?>
 
 <?= $this->section('content'); ?>
 
@@ -8,23 +8,6 @@ $total = [];
 
 <div class="row">
   <div class="col-12">
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-      <div class="alert alert-warning alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-        Silahkan lakukan pembayaran secepat mungkin, sebelum tanggal batas pembayaran.
-      </div>
-    <?php endif ?>
-
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
-      <div class="alert alert-info alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-        Silahkan menunggu admin untuk memvalidasi bukti bayar anda, silahkan menghubungi toko untuk informasi lebih
-        lanjut.
-      </div>
-    <?php endif ?>
-
 
     <!-- Main content -->
     <div class="invoice p-3 mb-3">
@@ -102,30 +85,30 @@ $total = [];
             <tbody>
               <?php $i = 1;
               foreach ($dataDetail as $item): ?>
-                <?php $total[] = $item['subtotal']; ?>
-                <tr>
-                  <td>
-                    <?= $i++; ?>
-                  </td>
-                  <td>
-                    <?= $item['id_produk']; ?>
-                  </td>
-                  <td>
-                    <?= $item['nama_produk']; ?>
-                  </td>
-                  <td>
-                    <?= $item['label_varian']; ?>
-                  </td>
-                  <td>
-                    <?= $item['kuantitas_produk']; ?>
-                  </td>
-                  <td>Rp
-                    <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
-                  </td>
-                  <td>Rp
-                    <?= number_format($item['subtotal'], 0, ',', '.') ?>
-                  </td>
-                </tr>
+              <?php $total[] = $item['subtotal']; ?>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['id_produk']; ?>
+                </td>
+                <td>
+                  <?= $item['nama_produk']; ?>
+                </td>
+                <td>
+                  <?= $item['label_varian']; ?>
+                </td>
+                <td>
+                  <?= $item['kuantitas_produk']; ?>
+                </td>
+                <td>Rp
+                  <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
+                </td>
+                <td>Rp
+                  <?= number_format($item['subtotal'], 0, ',', '.') ?>
+                </td>
+              </tr>
               <?php endforeach ?>
             </tbody>
           </table>
@@ -179,11 +162,16 @@ $total = [];
       <div class="row no-print">
         <div class="col-12">
           <a href="#" onclick="window.print()" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-          <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-            <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
-                class="fas fa-upload"></i> Upload Bukti
-              Bayar
-            </button>
+
+          <?php if ($dataTransaksi['bukti_bayar'] != null): ?>
+          <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
+              class="fas fa-eye"></i> Lihat Bukti Bayar
+          </button>
+          <?php endif ?>
+
+          <?php if ($dataTransaksi['status_transaksi'] == 'Pesanan sedang diproses'): ?>
+          <a href="<?= base_url('AdmPanel/Kirim/'.$dataTransaksi['id_transaksi']) ;?>"
+            class="btn btn-success float-right mr-2"><i class="fas fa-truck-pickup"></i> Kirim Pesanan</a>
           <?php endif ?>
         </div>
       </div>
@@ -197,21 +185,22 @@ $total = [];
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-warning">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Bukti Pembayaran</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Bukti Bayar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?= base_url('Panel/Transaksi/' . $dataTransaksi['id_transaksi']); ?>" method="POST"
-        enctype="multipart/form-data">
-        <div class="modal-body">
-          <input type="file" name="gambar" id="gambar" class="form-control" accept="image/*">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Upload</button>
-        </div>
-      </form>
+      <div class="modal-body">
+        <img class="img-fluid" src="<?= base_url('uploads/' . $dataTransaksi['bukti_bayar']); ?>" alt="">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
+        <a href="<?= base_url('AdmPanel/Validasi/' . $item['id_transaksi']); ?>" class="btn btn-primary">Validasi Bukti
+          Bayar Ini</a>
+        <?php endif ?>
+      </div>
     </div>
   </div>
 </div>

@@ -25,9 +25,13 @@ class Login implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (session()->get('logged_in_customer') == true) {
+        if (session()->get('logged_in_customer') == true && url_is('Login')) {
             return redirect()->to(base_url('Panel'));
-        } else if (session()->get('logged_in_admin') == true) {
+
+        } else if (session()->get('logged_in_customer') == true && url_is('Daftar')) {
+            return redirect()->to(base_url('Panel'));
+
+        } else if (session()->get('logged_in_admin') == true && url_is('Adm/Login')) {
             return redirect()->to(base_url('AdmPanel'));
         }
     }

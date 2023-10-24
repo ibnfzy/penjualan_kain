@@ -28,6 +28,10 @@
 </head>
 
 <body>
+  <?php
+  $db = \Config\Database::connect();
+  $get = $db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray();
+  ?>
   <?= $this->include('web/layouts/navbar'); ?>
 
   <?= $this->renderSection('content'); ?>
@@ -35,7 +39,7 @@
   <?= $this->include('web/layouts/footer'); ?>
 
   <div class="floating-button">
-    <a href="https://api.whatsapp.com/send?phone=1234567890" target="_blank">
+    <a href="https://wa.me/<?= $get['kontak']; ?>" target="_blank">
       <i class="fab fa-whatsapp fa-2x"></i>
       <span class="text">Hubungi Kami</span>
     </a>

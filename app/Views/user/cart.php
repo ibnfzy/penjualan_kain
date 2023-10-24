@@ -1,7 +1,9 @@
 <?= $this->extend('user/base'); ?>
 
 <?= $this->section('content'); ?>
-
+<?php if ($data[0]['total_produk'] == 0 && $data[0]['rowid'] == null) {
+  $data = [];
+} ?>
 <div class="row">
   <div class="col-md-12">
     <div class="card">

@@ -30,7 +30,10 @@ $routes->get('Logout', 'UserLogin::logoff');
 $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($routes) {
 
   $routes->get('/', 'AdmController::index');
-  $routes->get('Transkasi', 'AdmController::transaksi');
+  $routes->get('Transaksi', 'AdmController::transaksi');
+  $routes->get('Transaksi/(:segment)/(:segment)', 'AdmController::invoice/$1/$2');
+  $routes->get('Validasi/(:num)', 'AdmController::validasi/$1');
+  $routes->get('Kirim/(:num)', 'AdmController::kirim/$1');
   $routes->get('Customer', 'AdmController::customer');
 
   $routes->get('Produk', 'Produk::index');
@@ -59,6 +62,8 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
 
   $routes->get('Transaksi', 'UserController::transaksi');
   $routes->get('Transaksi/(:num)', 'UserController::invoice/$1');
+  $routes->post('Transaksi/(:num)', 'UserController::upload_bukti/$1');
+  $routes->get('Konfirmasi/(:num)', 'UserController::konfirmasi_pesanan/$1');
 
   $routes->get('Checkout', 'UserController::checkout');
 });
