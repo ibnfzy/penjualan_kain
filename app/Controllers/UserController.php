@@ -225,4 +225,96 @@ class UserController extends BaseController
         return redirect()->to(previous_url())->with('type-status', 'success')
             ->with('message', 'Pesanan berhasil dikirim');
     }
+
+    public function testimoni()
+    {
+        $opt = [];
+        $get = $this->db->table('transaksi')
+            ->where('id_customer', session()->get('id_customer'))
+            ->where('status_transaksi', 'Pesanan berhasil diterima oleh pemesan')
+            ->get()
+            ->getResultArray();
+
+        foreach ($get as $key => $value) {
+            $getDetail = $this->db->table('transaksi_detail')->where('id_transaksi', $value['id_transaksi'])->get()->getResultArray();
+
+            foreach ($getDetail as $ky => $val) {
+                $opt[] = [
+                    'id_transaksi_detail' => $val['id_transaksi_detail'],
+                    'id_produk' => $val['id_produk'],
+                    'nama_produk' => $val['nama_produk'],
+                    'varian' => $val['label_varian']
+                ];
+            }
+        }
+
+        foreach ($opt as $item) {
+            $check = $this->db->table('review')->where('id_transaksi_detail', $item['id_transaksi_detail'])->get()->getRowArray();
+
+            if ($check != null) {
+                $i = array_search($item['id_transaksi_detail'], $opt);
+
+                unset($opt[$i]);
+            }
+        }
+
+        return view('user/testimoni', [
+            'data' => $this->db->table('review')->where('id_customer', session()->get('id_customer'))->get()->getResultArray(),
+            'opt' => $opt
+        ]);
+    }
+
+    public function testimoni_save()
+    {
+        $rules = [
+            'id_transaksi_detail' => 'required',
+            'bintang' => 'required',
+            'deskripsi' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(previous_url())->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $get = $this->db->table('transaksi_detail')->where('id_transaksi_detail', $this->request->getPost('id_transaksi_detail'))->get()->getRowArray();
+
+        $this->db->table('review')->insert([
+            'id_produk' => $get['id_produk'],
+            'id_customer' => $get['id_customer'],
+            'id_transaksi_detail' => $get['id_transaksi_detail'],
+            'varian_produk' => $get['label_varian'],
+            'bintang' => $this->request->getPost('bintang'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+        ]);
+
+        return redirect()->to(previous_url())->with('type-status', 'success')
+            ->with('message', 'Testimoni berhasil ditambahkan');
+    }
+
+    public function testimoni_edit($id)
+    {
+        $rules = [
+            'id_transaksi_detail' => 'required',
+            'bintang' => 'required',
+            'deskripsi' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(previous_url())->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $get = $this->db->table('transaksi_detail')->where('id_transaksi_detail', $this->request->getPost('id_transaksi_detail'))->get()->getRowArray();
+
+        $this->db->table('review')->where('id_review', $id)->update([
+            'id_produk' => $get['id_produk'],
+            'id_customer' => $get['id_customer'],
+            'id_transaksi_detail' => $get['id_transaksi_detail'],
+            'varian_produk' => $get['label_varian'],
+            'bintang' => $this->request->getPost('bintang'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+        ]);
+
+        return redirect()->to(previous_url())->with('type-status', 'success')
+            ->with('message', 'Testimoni berhasil ditambahkan');
+    }
 }

@@ -12,5 +12,6 @@ class Seed extends Seeder
         $this->call('Customer');
         $this->call('Produk');
         $this->call('InformasiToko');
+        $this->call('Transaksi');
     }
 }

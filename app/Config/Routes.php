@@ -66,4 +66,8 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
   $routes->get('Konfirmasi/(:num)', 'UserController::konfirmasi_pesanan/$1');
 
   $routes->get('Checkout', 'UserController::checkout');
+
+  $routes->get('Testimoni', 'UserController::testimoni');
+  $routes->post('Testimoni', 'UserController::testimoni_save');
+  $routes->post('Testimoni/(:num)', 'UserController::testimoni_edit/$1');
 });

@@ -26,38 +26,42 @@
           <tbody>
             <?php $i = 1; ?>
             <?php foreach ($data as $item): ?>
-            <tr>
-              <td>
-                <?= $i++; ?>
-              </td>
-              <td>
-                <?= $item['total_produk']; ?>
-              </td>
-              <td>Rp.
-                <?= number_format($item['total_bayar'], 0, ',', '.'); ?>
-              </td>
-              <td>
-                <?= date('d M Y', strtotime($item['tgl_checkout'])); ?>
-              </td>
-              <td>
-                <?= date('d M Y', strtotime($item['batas_pembayaran'])); ?>
-              </td>
-              <td>
-                <?= $item['status_transaksi']; ?>
-              </td>
-              <td>
-                <a href="<?= base_url('Panel/Transaksi/' . $item['id_transaksi']); ?>"
-                  class="btn btn-danger">Invoice</a>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['total_produk']; ?>
+                </td>
+                <td>Rp.
+                  <?= number_format($item['total_bayar'], 0, ',', '.'); ?>
+                </td>
+                <td>
+                  <?= date('d M Y', strtotime($item['tgl_checkout'])); ?>
+                </td>
+                <td>
+                  <?= date('d M Y', strtotime($item['batas_pembayaran'])); ?>
+                </td>
+                <td>
+                  <?= $item['status_transaksi']; ?>
+                </td>
+                <td>
 
-                <?php if ($item['status_transaksi'] == 'Pesanan sedang menuju lokasi pemesan'): ?>
-                <a href="<?= base_url('Panel/Konfirmasi/' . $item['id_transaksi']); ?>"
-                  class="btn btn-primary">Konfirmasi
-                  Pesanan Diterima</a>
-                <?php endif ?>
+                  <a href="<?= base_url('Panel/Transaksi/' . $item['id_transaksi']); ?>"
+                    class="btn btn-danger">Invoice</a>
 
+                  <?php if ($item['status_transaksi'] == 'Pesanan sedang menuju lokasi pemesan'): ?>
+                    <a href="<?= base_url('Panel/Konfirmasi/' . $item['id_transaksi']); ?>"
+                      class="btn btn-primary">Konfirmasi
+                      Pesanan Diterima</a>
+                  <?php endif ?>
 
-              </td>
-            </tr>
+                  <?php if ($item['status_transaksi'] == 'Pesanan berhasil diterima oleh pemesan'): ?>
+                    <a href="#" class="btn btn-primary"><i class="fas fa-star"></i> Berikan Testimoni</a>
+                  <?php endif ?>
+
+                </td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>

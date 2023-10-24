@@ -20,6 +20,13 @@ class Review extends Migration
             'id_customer' => [
                 'type' => 'INT'
             ],
+            'id_transaksi_detail' => [
+                'type' => 'INT'
+            ],
+            'varian_produk' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50
+            ],
             'bintang' => [
                 'type' => 'INT'
             ],

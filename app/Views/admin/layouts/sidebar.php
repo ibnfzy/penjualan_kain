@@ -57,7 +57,14 @@
           </a>
         </li>
 
-
+        <li class="nav-item">
+          <a href="<?= base_url('AdmPanel/Customer'); ?>" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Laporan Transaksi
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
