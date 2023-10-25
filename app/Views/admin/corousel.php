@@ -23,15 +23,15 @@
           <tbody>
             <?php $i = 1; ?>
             <?php foreach ($data as $item): ?>
-              <tr>
-                <td>
-                  <?= $i++; ?>
-                </td>
-                <td><img src="<?= base_url('uploads/' . $item['gambar']); ?>" alt="" width="100"></td>
-                <td><a href="<?= base_url('AdmPanel/Corousel/' . $item['id_corousel']); ?>"
-                    class="btn btn-danger">Hapus</a>
-                </td>
-              </tr>
+            <tr>
+              <td>
+                <?= $i++; ?>
+              </td>
+              <td><img src="<?= base_url('uploads/' . $item['gambar']); ?>" alt="" width="100"></td>
+              <td><a href="<?= base_url('AdmPanel/Corousel/' . $item['id_corousel']); ?>"
+                  class="btn btn-danger">Hapus</a>
+              </td>
+            </tr>
             <?php endforeach ?>
           </tbody>
         </table>

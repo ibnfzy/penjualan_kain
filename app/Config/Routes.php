@@ -35,6 +35,8 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($route
   $routes->get('Validasi/(:num)', 'AdmController::validasi/$1');
   $routes->get('Kirim/(:num)', 'AdmController::kirim/$1');
   $routes->get('Customer', 'AdmController::customer');
+  $routes->get('LaporanTransaksi', 'AdmController::laporan_transaksi');
+  $routes->post('LaporanTransaksi/render', 'AdmController::render_laporan_transaksi');
 
   $routes->get('Produk', 'Produk::index');
   $routes->get('Produk/Tambah', 'Produk::new');

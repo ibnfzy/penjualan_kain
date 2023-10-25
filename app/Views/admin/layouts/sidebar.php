@@ -58,8 +58,8 @@
         </li>
 
         <li class="nav-item">
-          <a href="<?= base_url('AdmPanel/Customer'); ?>" class="nav-link">
-            <i class="nav-icon fas fa-users"></i>
+          <a href="<?= base_url('AdmPanel/LaporanTransaksi'); ?>" class="nav-link">
+            <i class="nav-icon fas fa-file-code"></i>
             <p>
               Laporan Transaksi
             </p>
