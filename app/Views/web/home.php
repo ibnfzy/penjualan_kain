@@ -10,15 +10,11 @@ $home = new \App\Controllers\Home;
     <div class="row">
       <div class="col-md-12">
         <div class="header-slider normal-slider">
+          <?php foreach ($corousel as $item): ?>
           <div class="header-slider-item">
-            <img src="<?= base_url() ?>img/slider-1.jpg" alt="Slider Image" />
+            <img src="<?= base_url('uploads/'.$item['gambar']) ?>" alt="Slider Image" />
           </div>
-          <div class="header-slider-item">
-            <img src="<?= base_url() ?>img/slider-2.jpg" alt="Slider Image" />
-          </div>
-          <div class="header-slider-item">
-            <img src="<?= base_url() ?>img/slider-3.jpg" alt="Slider Image" />
-          </div>
+          <?php endforeach ?>
         </div>
       </div>
     </div>

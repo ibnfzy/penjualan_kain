@@ -16,7 +16,8 @@ class Home extends BaseController
     public function index(): string
     {
         return view('web/home', [
-            'rekom' => $this->db->table('produk')->orderBy('id_produk', 'RAND()')->get()->getResultArray()
+            'rekom' => $this->db->table('produk')->orderBy('id_produk', 'RAND()')->get()->getResultArray(),
+            'corousel' => $this->db->table('corousel')->orderBy('id_corousel', 'DESC')->get()->getResultArray(),
         ]);
     }
 

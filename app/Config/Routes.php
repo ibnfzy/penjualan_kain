@@ -19,7 +19,12 @@ $routes->post('Cart/Update', 'Home::update_cart');
 $routes->post('Cart/Add', 'Home::add_barang');
 
 $routes->get('Adm/Login', 'AdminLogin::index');
+$routes->get('Adm/Logout', 'AdminLogin::logoff');
 $routes->post('Adm/Login', 'AdminLogin::auth');
+
+$routes->get('Own/Login', 'OwnLogin::index');
+$routes->get('Own/Logout', 'OwnLogin::logoff');
+$routes->post('Own/Login', 'OwnLogin::auth');
 
 $routes->get('Login', 'UserLogin::index');
 $routes->post('Login', 'UserLogin::auth');
@@ -72,4 +77,11 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
   $routes->get('Testimoni', 'UserController::testimoni');
   $routes->post('Testimoni', 'UserController::testimoni_save');
   $routes->post('Testimoni/(:num)', 'UserController::testimoni_edit/$1');
+});
+
+$routes->group('OwnPanel', ['namespace' => 'App\Controllers'], function ($routes) {
+  $routes->get('/', 'OwnController::index');
+  $routes->get('Customer', 'OwnController::customer');
+  $routes->post('render', 'OwnController::render_laporan_transaksi');
+
 });

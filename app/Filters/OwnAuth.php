@@ -6,7 +6,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class UserAuth implements FilterInterface
+class OwnAuth implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -25,8 +25,8 @@ class UserAuth implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session()->get('logged_in_user')) {
-            return redirect()->to(base_url('Login'));
+        if (!session()->get('logged_in_pemilik')) {
+            return redirect()->to(base_url('AdmPanel/Login'));
         }
     }
 

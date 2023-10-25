@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Filters\AdminAuth;
 use App\Filters\Login;
+use App\Filters\OwnAuth;
 use App\Filters\UserAuth;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
@@ -30,6 +31,7 @@ class Filters extends BaseConfig
         'admin' => AdminAuth::class,
         'user' => UserAuth::class,
         'login' => Login::class,
+        'owner' => OwnAuth::class,
     ];
 
     /**
@@ -90,6 +92,12 @@ class Filters extends BaseConfig
                 'Adm/Login',
                 'Login',
                 'Daftar'
+            ]
+        ],
+        'owner' => [
+            'before' => [
+                'OwnPanel',
+                'OwnPanel/*'
             ]
         ]
     ];

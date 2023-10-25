@@ -23,15 +23,15 @@
           <tbody>
             <?php $i = 1; ?>
             <?php foreach ($data as $item): ?>
-            <tr>
-              <td>
-                <?= $i++; ?>
-              </td>
-              <td><img src="<?= base_url('uploads/' . $item['gambar']); ?>" alt="" width="100"></td>
-              <td><a href="<?= base_url('AdmPanel/Corousel/' . $item['id_corousel']); ?>"
-                  class="btn btn-danger">Hapus</a>
-              </td>
-            </tr>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td><img src="<?= base_url('uploads/' . $item['gambar']); ?>" alt="" width="100"></td>
+                <td><a href="<?= base_url('AdmPanel/Corousel/' . $item['id_corousel']); ?>"
+                    class="btn btn-danger">Hapus</a>
+                </td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>
@@ -43,7 +43,7 @@
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="uploadLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-warning">
         <h5 class="modal-title" id="penyerahanDesainLabel">Tambah Gambar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -53,7 +53,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="">Gambar</label> <br>
-            <div class="col-sm-2">
+            <div class="col-sm-12">
               <input type="file" name="gambar" class="form-control" id="" accept="image/*">
             </div>
           </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-          <button type="submit">Tambah</button>
+          <button type="submit" class="btn btn-warning">Tambah</button>
         </div>
       </form>
     </div>

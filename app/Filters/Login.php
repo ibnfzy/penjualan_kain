@@ -33,6 +33,10 @@ class Login implements FilterInterface
 
         } else if (session()->get('logged_in_admin') == true && url_is('Adm/Login')) {
             return redirect()->to(base_url('AdmPanel'));
+
+        } else if (session()->get('logged_in_pemilik') == true && url_is('Own/Login')) {
+            return redirect()->to(base_url('OwnPanel'));
+
         }
     }
 

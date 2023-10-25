@@ -8,7 +8,7 @@
           <h2>Fast Links</h2>
           <ul>
             <li><a href="<?= base_url('Adm/Login') ?>">Login Admin</a></li>
-            <li><a href="<?= base_url() ?>">Login Owner</a></li>
+            <li><a href="<?= base_url('Own/Login') ?>">Login Owner</a></li>
           </ul>
         </div>
       </div>
