@@ -25,7 +25,7 @@ class UserAuth implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session()->get('logged_in_user')) {
+        if (!session()->get('logged_in_customer')) {
             return redirect()->to(base_url('Login'));
         }
     }

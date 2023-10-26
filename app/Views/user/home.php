@@ -1,5 +1,17 @@
 <?= $this->extend('user/base'); ?>
 <?= $this->section('content'); ?>
+<?php
+$total = count($selesai);
+$jenis = 'Pelanggan';
+
+if ($total <= 1) {
+  $jenis = 'Pelanggan';
+} else if ($total <= 5) {
+  $jenis = 'Pelanggan Lama';
+} else if ($total <= 10) {
+  $jenis = 'Pelanggan Loyal';
+}
+?>
 <div class="row">
   <div class="col-md-3 col-sm-6 col-12">
     <div class="info-box shadow">
@@ -8,7 +20,7 @@
       <div class="info-box-content">
         <span class="info-box-text">Transaksi Selesai</span>
         <span class="info-box-number">
-          1
+          <?= count($selesai); ?>
         </span>
       </div>
       <!-- /.info-box-content -->
@@ -23,7 +35,7 @@
       <div class="info-box-content">
         <span class="info-box-text">Transaksi Belum Selesai</span>
         <span class="info-box-number">
-          1
+          <?= count($belum); ?>
         </span>
       </div>
       <!-- /.info-box-content -->
@@ -32,20 +44,6 @@
   </div>
   <!-- /.col -->
   <!-- /.col -->
-  <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box shadow">
-      <span class="info-box-icon bg-danger"><i class="far fa-money-bill-alt"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">Total Bayar Transaksi Selesai</span>
-        <span class="info-box-number">Rp.
-          1
-        </span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
 
   <div class="col-md-3 col-sm-6 col-12">
     <div class="info-box shadow">
@@ -54,7 +52,7 @@
       <div class="info-box-content">
         <span class="info-box-text">Jenis Pelanggan</span>
         <span class="info-box-number">
-          1
+          <?= $jenis; ?>
         </span>
       </div>
       <!-- /.info-box-content -->

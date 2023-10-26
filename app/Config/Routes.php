@@ -32,9 +32,11 @@ $routes->get('Daftar', 'UserLogin::signup');
 $routes->post('Daftar', 'UserLogin::save');
 $routes->get('Logout', 'UserLogin::logoff');
 
-$routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($routes) {
+$routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteCollection $routes) {
 
   $routes->get('/', 'AdmController::index');
+  $routes->post('UpadateInformasi', 'AdmController::informasiToko');
+  $routes->post('UpadateTentang', 'AdmController::tentangToko');
   $routes->get('Transaksi', 'AdmController::transaksi');
   $routes->get('Transaksi/(:segment)/(:segment)', 'AdmController::invoice/$1/$2');
   $routes->get('Validasi/(:num)', 'AdmController::validasi/$1');
@@ -58,9 +60,11 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function ($route
   $routes->get('Corousel/(:num)', 'Corousel::delete/$1');
 });
 
-$routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
+$routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteCollection $routes) {
 
   $routes->get('/', 'UserController::index');
+
+  $routes->post('UpdatePassword', 'UserController::updatePassword');
 
   $routes->get('Cart/Simpan', 'UserController::simpan_keranjang');
   $routes->get('Cart', 'UserController::keranjang');
@@ -79,7 +83,7 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function ($routes) {
   $routes->post('Testimoni/(:num)', 'UserController::testimoni_edit/$1');
 });
 
-$routes->group('OwnPanel', ['namespace' => 'App\Controllers'], function ($routes) {
+$routes->group('OwnPanel', ['namespace' => 'App\Controllers'], function (RouteCollection $routes) {
   $routes->get('/', 'OwnController::index');
   $routes->get('Customer', 'OwnController::customer');
   $routes->post('render', 'OwnController::render_laporan_transaksi');

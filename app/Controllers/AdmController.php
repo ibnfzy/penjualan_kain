@@ -16,7 +16,48 @@ class AdmController extends BaseController
 
     public function index()
     {
-        return view('admin/home');
+        return view('admin/home', [
+            'plaris' => $this->db->query('SELECT DISTINCT id_produk, count(id_produk) as total_transaksi, nama_produk FROM `transaksi_detail` LIMIT 15')->getResultArray(),
+            'toko' => $this->db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray(),
+        ]);
+    }
+
+    public function informasiToko()
+    {
+        $rules = [
+            'kontak' => 'required',
+            'alamat' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('AdmPanel'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $this->db->table('informasi_toko')->where('id_toko', 1)->update([
+            'kontak' => $this->request->getPost('kontak'),
+            'alamat' => $this->request->getPost('alamat'),
+        ]);
+
+        return redirect()->to(base_url('AdmPanel'))->with('type-status', 'success')
+            ->with('message', 'Data berhasil diubah');
+    }
+
+    public function tentangToko()
+    {
+        $rules = [
+            'tentang' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('AdmPanel'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $this->db->table('informasi_toko')->where('id_toko', 1)->update([
+            'tentang' => $this->request->getPost('tentang'),
+        ]);
+
+        return redirect()->to(base_url('AdmPanel'))->with('type-status', 'success')
+            ->with('message', 'Data berhasil diubah');
     }
 
     public function transaksi()

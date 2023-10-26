@@ -24,7 +24,10 @@ class UserController extends BaseController
 
     public function index()
     {
-        return view('user/home');
+        return view('user/home', [
+            'selesai' => $this->db->table('transaksi')->where('status_transaksi', 'Pesanan berhasil diterima oleh pemesan')->get()->getResultArray(),
+            'belum' => $this->db->table('transaksi')->notLike('status_transaksi', 'Pesanan berhasil diterima oleh pemesan')->get()->getResultArray(),
+        ]);
     }
 
     public function proses_keranjang($uid)
@@ -316,5 +319,30 @@ class UserController extends BaseController
 
         return redirect()->to(previous_url())->with('type-status', 'success')
             ->with('message', 'Testimoni berhasil ditambahkan');
+    }
+
+    public function updatePassword()
+    {
+        $rules = [
+            'old' => 'required',
+            'new' => 'required',
+            'conf' => 'matches[new]'
+        ];
+
+        $check = $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->get()->getRowArray();
+
+        if (!password_verify($this->request->getPost('old'), $check['password'])) {
+            return redirect()->to(base_url('Panel'))->with('type-status', 'error')->with('message', 'Password Lama Tidak Benar');
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('Panel'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->update([
+            'password' => password_hash($this->request->getPost('new'), PASSWORD_DEFAULT),
+        ]);
+
+        return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
     }
 }
