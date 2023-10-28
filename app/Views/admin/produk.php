@@ -107,7 +107,7 @@ $i = 1;
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-          <button type="submit">Tambah</button>
+          <button class="btn btn-warning" type="submit">Tambah</button>
         </div>
       </form>
     </div>
@@ -154,7 +154,7 @@ $i = 1;
 function modalVarian(id = '') {
 
   $('#id_produk').val(id)
-  $('#detail').modal('toggle')
+  $('#varian').modal('toggle')
 }
 
 function modalShow(id = '') {

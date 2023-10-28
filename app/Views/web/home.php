@@ -11,9 +11,9 @@ $home = new \App\Controllers\Home;
       <div class="col-md-12">
         <div class="header-slider normal-slider">
           <?php foreach ($corousel as $item): ?>
-          <div class="header-slider-item">
-            <img src="<?= base_url('uploads/'.$item['gambar']) ?>" alt="Slider Image" />
-          </div>
+            <div class="header-slider-item">
+              <img src="<?= base_url('uploads/' . $item['gambar']) ?>" alt="Slider Image" />
+            </div>
           <?php endforeach ?>
         </div>
       </div>
@@ -48,7 +48,7 @@ $home = new \App\Controllers\Home;
     <div class="row align-items-center product-slider product-slider-4">
       <?php foreach ($rekom as $item): ?>
 
-      <?php
+        <?php
         $get = $db->table('produk_detail')->where('id_produk', $item['id_produk'])->orderBy('RAND()')->get(1)->getRowArray();
         $getMaxHarga = $db->table('produk_detail')->selectMax('harga_produk', 'max_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
         $getMinHarga = $db->table('produk_detail')->selectMin('harga_produk', 'min_harga')->where('id_produk', $item['id_produk'])->get()->getRowArray();
@@ -59,31 +59,31 @@ $home = new \App\Controllers\Home;
         $total_star = $home->review_star($item['id_produk']);
         ?>
 
-      <div class="col-lg-3" style="max-width: 100%;">
-        <div class="product-item">
-          <div class="product-title">
-            <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
-              <?= $item['nama_produk']; ?>
-            </a>
-            <div class="ratting">
-              <?= $total_star; ?>
+        <div class="col-lg-3" style="max-width: 100%;">
+          <div class="product-item">
+            <div class="product-title">
+              <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+                <?= $item['nama_produk']; ?>
+              </a>
+              <div class="ratting">
+                <?= $total_star; ?>
+              </div>
             </div>
-          </div>
-          <div class="product-image">
-            <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
-              <img src="<?= base_url('uploads/' . $get['gambar_produk']) ?>" alt="Product Image">
-            </a>
-            <div class="product-action">
-              <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>"><i class="fa fa-eye"></i></a>
+            <div class="product-image">
+              <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>">
+                <img src="<?= base_url('uploads/' . $get['gambar_produk']) ?>" alt="Product Image">
+              </a>
+              <div class="product-action">
+                <a href="<?= base_url('Katalog/' . $item['id_produk']); ?>"><i class="fa fa-eye"></i></a>
+              </div>
             </div>
-          </div>
-          <div class="product-price">
-            <h3>
-              <?= $harga; ?>
-            </h3>
+            <div class="product-price">
+              <h3>
+                <?= $harga; ?>
+              </h3>
+            </div>
           </div>
         </div>
-      </div>
       <?php endforeach ?>
     </div>
   </div>
