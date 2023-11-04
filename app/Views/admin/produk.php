@@ -25,32 +25,32 @@ $i = 1;
           </thead>
           <tbody>
             <?php foreach ($data as $item): ?>
-            <?php $get = $db->table('produk_detail')->where('id_produk', $item['id_produk'])->get()->getResultArray(); ?>
-            <tr>
-              <td>
-                <?= $i++; ?>
-              </td>
-              <td>
-                <?= $item['nama_produk']; ?>
-              </td>
-              <td>
-                <div class="row">
-                  <?php foreach ($get as $node): ?>
-                  <div title="<?= $node['label_warna_produk']; ?>"
-                    style="height: 30px; width: 30px; border: 1px solid black; background-color: <?= $node['warna_produk'] ?>;">
+              <?php $get = $db->table('produk_detail')->where('id_produk', $item['id_produk'])->get()->getResultArray(); ?>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['nama_produk']; ?>
+                </td>
+                <td>
+                  <div class="row">
+                    <?php foreach ($get as $node): ?>
+                      <div title="<?= $node['label_warna_produk']; ?>"
+                        style="height: 30px; width: 30px; border: 1px solid black; background-color: <?= $node['warna_produk'] ?>;">
+                      </div>
+                    <?php endforeach ?>
                   </div>
-                  <?php endforeach ?>
-                </div>
-              </td>
-              <td>
-                <button class="btn btn-info" onclick="modalVarian('<?= $item['id_produk']; ?>')">Tambah Varian</button>
-                <button class="btn" style="background: orange;" onclick="modalShow('<?= $item['id_produk']; ?>')">Detail
-                  Produk</button>
-                <a href="<?= base_url('AdmPanel/Produk/' . $item['id_produk']); ?>" class="btn btn-primary">Edit</a>
-                <a href="<?= base_url('AdmPanel/Produk/Hapus/' . $item['id_produk']); ?>"
-                  class="btn btn-danger">Hapus</a>
-              </td>
-            </tr>
+                </td>
+                <td>
+                  <button class="btn btn-info" onclick="modalVarian('<?= $item['id_produk']; ?>')">Tambah Varian</button>
+                  <button class="btn" style="background: orange;" onclick="modalShow('<?= $item['id_produk']; ?>')">Detail
+                    Produk</button>
+                  <a href="<?= base_url('AdmPanel/Produk/' . $item['id_produk']); ?>" class="btn btn-primary">Edit</a>
+                  <a href="<?= base_url('AdmPanel/Produk/Hapus/' . $item['id_produk']); ?>"
+                    class="btn btn-danger">Hapus</a>
+                </td>
+              </tr>
             <?php endforeach ?>
           </tbody>
         </table>
@@ -63,7 +63,7 @@ $i = 1;
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="penyerahanDesainLabel">Detail Produk</h5>
+        <h5 class="modal-title" id="penyerahanDesainLabel">Tambah Varian Produk</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -151,34 +151,34 @@ $i = 1;
 <?= $this->section('script'); ?>
 
 <script>
-function modalVarian(id = '') {
+  function modalVarian(id = '') {
 
-  $('#id_produk').val(id)
-  $('#varian').modal('toggle')
-}
+    $('#id_produk').val(id)
+    $('#varian').modal('toggle')
+  }
 
-function modalShow(id = '') {
+  function modalShow(id = '') {
 
-  const xmlhttp = new XMLHttpRequest();
+    const xmlhttp = new XMLHttpRequest();
 
-  xmlhttp.onload = function() {
-    let text = ""
-    resObj = JSON.parse(this.responseText);
+    xmlhttp.onload = function () {
+      let text = ""
+      resObj = JSON.parse(this.responseText);
 
-    const formatter = new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
+      const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+      });
 
-    for (let i in resObj) {
-      warna = resObj[i].warna_produk
-      label = resObj[i].label_warna_produk
-      gambar = '<?= base_url('uploads/') ?>' + resObj[i].gambar_produk
-      dharga = resObj[i].harga_produk
-      harga = formatter.format(dharga)
-      stok = resObj[i].stok_produk
+      for (let i in resObj) {
+        warna = resObj[i].warna_produk
+        label = resObj[i].label_warna_produk
+        gambar = '<?= base_url('uploads/') ?>' + resObj[i].gambar_produk
+        dharga = resObj[i].harga_produk
+        harga = formatter.format(dharga)
+        stok = resObj[i].stok_produk
 
-      text += `
+        text += `
       <tr>
         <td>
            <div style="height: 30px; width: 30px; border: 1px solid black; background-color: ${warna};">
@@ -189,15 +189,15 @@ function modalShow(id = '') {
         <td>${stok}</td>
       </tr>
       `
+      }
+
+      document.getElementById("tbody").innerHTML = text;
+      $('#detail').modal('toggle')
     }
 
-    document.getElementById("tbody").innerHTML = text;
-    $('#detail').modal('toggle')
+    xmlhttp.open("GET", "<?= base_url('AdmPanel/Produk/Detail/'); ?>" + id);
+    xmlhttp.send();
   }
-
-  xmlhttp.open("GET", "<?= base_url('AdmPanel/Produk/Detail/'); ?>" + id);
-  xmlhttp.send();
-}
 </script>
 
 <?= $this->endSection(); ?>

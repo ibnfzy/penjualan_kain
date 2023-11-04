@@ -7,10 +7,14 @@ use App\Controllers\BaseController;
 class UserLogin extends BaseController
 {
     protected $db;
+    public $rules;
 
     public function __construct()
     {
         $this->db = \Config\Database::connect();
+        $this->rules = [
+            'is_unique' => ''
+        ];
     }
 
     public function index()
@@ -78,7 +82,7 @@ class UserLogin extends BaseController
     public function save_data()
     {
         $rules = [
-            'username' => 'required|max_length[16]',
+            'username' => 'required|max_length[16]|is_unique[customer.username]',
             'fullname' => 'required|max_length[150]',
             'password' => 'required',
             'confirm_password' => 'matches[password]',
