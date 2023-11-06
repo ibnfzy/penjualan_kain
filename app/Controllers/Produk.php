@@ -23,6 +23,10 @@ class Produk extends BaseController
 
     public function new()
     {
+        if (!session()->get('jumlah_varian')) {
+            session()->set('jumlah_varian', 1);
+        }
+
         return view('admin/produk_add');
     }
 
