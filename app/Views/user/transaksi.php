@@ -15,7 +15,7 @@
             <tr>
               <th>No.</th>
               <th>Total Barang</th>
-              <th>Total Bayar</th>
+              <th>Total Harga</th>
               <th>Tanggal Checkout</th>
               <th>Batas Pembayaran</th>
               <th>Status Transaksi</th>

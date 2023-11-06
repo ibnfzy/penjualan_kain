@@ -4,25 +4,29 @@
 
 <?php
 $total = [];
+$db = \Config\Database::connect();
+$ongkir = $db->table('ongkir')->where('id_ongkir', $dataUser['id_ongkir'])->get()->getRowArray();
+
+$diskon = 0;
 ?>
 
 <div class="row">
   <div class="col-12">
     <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-      <div class="alert alert-warning alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-        Silahkan lakukan pembayaran secepat mungkin, sebelum tanggal batas pembayaran.
-      </div>
+    <div class="alert alert-warning alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
+      Silahkan lakukan pembayaran secepat mungkin, sebelum tanggal batas pembayaran.
+    </div>
     <?php endif ?>
 
     <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
-      <div class="alert alert-info alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-        Silahkan menunggu admin untuk memvalidasi bukti bayar anda, silahkan menghubungi toko untuk informasi lebih
-        lanjut.
-      </div>
+    <div class="alert alert-info alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
+      Silahkan menunggu admin untuk memvalidasi bukti bayar anda, silahkan menghubungi toko untuk informasi lebih
+      lanjut.
+    </div>
     <?php endif ?>
 
 
@@ -61,10 +65,10 @@ $total = [];
             </strong><br>
             Alamat Lengkap :
             <?= $dataUser['alamat']; ?><br>
-            Kota/Kabupaten :
-            <?= $dataUser['kota_kab']; ?><br>
-            Kecamatan/Desa :
-            <?= $dataUser['kec_desa']; ?><br>
+            Kota/Kabupaten - Kecamatan/Desa :
+            <?= $dataUser['kota_kab'] . ' - ' . $dataUser['kec_desa']; ?><br>
+            Alamat Pengiriman :
+            <?= $dataUser['alamat']; ?><br>
             Kontak :
             <?= $dataUser['nomor_hp']; ?>
           </address>
@@ -102,30 +106,30 @@ $total = [];
             <tbody>
               <?php $i = 1;
               foreach ($dataDetail as $item): ?>
-                <?php $total[] = $item['subtotal']; ?>
-                <tr>
-                  <td>
-                    <?= $i++; ?>
-                  </td>
-                  <td>
-                    <?= $item['id_produk']; ?>
-                  </td>
-                  <td>
-                    <?= $item['nama_produk']; ?>
-                  </td>
-                  <td>
-                    <?= $item['label_varian']; ?>
-                  </td>
-                  <td>
-                    <?= $item['kuantitas_produk']; ?>
-                  </td>
-                  <td>Rp
-                    <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
-                  </td>
-                  <td>Rp
-                    <?= number_format($item['subtotal'], 0, ',', '.') ?>
-                  </td>
-                </tr>
+              <?php $total[] = $item['subtotal']; ?>
+              <tr>
+                <td>
+                  <?= $i++; ?>
+                </td>
+                <td>
+                  <?= $item['id_produk']; ?>
+                </td>
+                <td>
+                  <?= $item['nama_produk']; ?>
+                </td>
+                <td>
+                  <?= $item['label_varian']; ?>
+                </td>
+                <td>
+                  <?= $item['kuantitas_produk']; ?>
+                </td>
+                <td>Rp
+                  <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
+                </td>
+                <td>Rp
+                  <?= number_format($item['subtotal'], 0, ',', '.') ?>
+                </td>
+              </tr>
               <?php endforeach ?>
             </tbody>
           </table>
@@ -134,12 +138,35 @@ $total = [];
       </div>
       <!-- /.row -->
 
+      <?php
+      $total_harga = array_sum($total);
+      $total_bayar = $total_harga + $ongkir['biaya_ongkir'];
+      $total_diskon = 0;
+
+      if ($dataTransaksi['total_produk'] >= 10) {
+        $diskon = 20;
+        $total_diskon = $total_harga * (20 / 100);
+        $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
+
+      } else if ($dataTransaksi['total_produk'] >= 7) {
+        $diskon = 10;
+        $total_diskon = $total_harga * (10 / 100);
+        $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
+
+      } else if ($dataTransaksi['total_produk'] >= 5) {
+        $diskon = 5;
+        $total_diskon = $total_harga * (5 / 100);
+        $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
+
+      }
+      ?>
+
       <div class="row">
         <!-- accepted payments column -->
         <div class="col-6">
           <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
             Silahkan menyelesaikan transaksi dengan mengirim pembayaran dengan nominal <br> Rp
-            <?= $total_bayar = number_format(array_sum($total) + 40000, 0, ',', '.'); ?>
+            <?= number_format($total_bayar, 0, ',', '.'); ?>
             ke BANK XYZ 123456789 A/N
             Novita
           </p>
@@ -151,21 +178,39 @@ $total = [];
           <div class="table-responsive">
             <table class="table">
               <tr>
-                <th style="width:50%">Total Harga:</th>
+                <th>Diskon:</th>
+                <td>
+                  <?= $diskon; ?> %
+                </td>
+              </tr>
+              <tr>
+                <th>Subtotal Harga:</th>
                 <td>Rp
                   <?= number_format(array_sum($total), 0, ',', '.'); ?>
                 </td>
               </tr>
               <tr>
+                <th>Total Potongan Diskon:</th>
+                <td>Rp
+                  <?= number_format($total_diskon, 0, ',', '.'); ?>
+                </td>
+              </tr>
+              <tr>
+                <th>Total Harga:</th>
+                <td>Rp
+                  <?= number_format(array_sum($total) - $total_diskon, 0, ',', '.'); ?>
+                </td>
+              </tr>
+              <tr>
                 <th>Biaya Ongkir:</th>
                 <td>Rp
-                  <?= number_format(40000, 0, ',', '.'); ?>
+                  <?= number_format($ongkir['biaya_ongkir'], 0, ',', '.'); ?>
                 </td>
               </tr>
               <tr>
                 <th>Total Bayar:</th>
                 <td>Rp
-                  <?= $total_bayar; ?>
+                  <?= number_format($total_bayar, 0, ',', '.'); ?>
                 </td>
               </tr>
             </table>
@@ -180,10 +225,10 @@ $total = [];
         <div class="col-12">
           <a href="#" onclick="window.print()" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
           <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-            <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
-                class="fas fa-upload"></i> Upload Bukti
-              Bayar
-            </button>
+          <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
+              class="fas fa-upload"></i> Upload Bukti
+            Bayar
+          </button>
           <?php endif ?>
         </div>
       </div>

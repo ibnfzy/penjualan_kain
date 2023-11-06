@@ -1,5 +1,6 @@
 <?php
 $db = \Config\Database::connect();
+$ongkir = $db->table('ongkir')->get()->getResultArray();
 $toko = $db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray();
 ?>
 <aside class="main-sidebar sidebar-light-primary elevation-4">
@@ -72,6 +73,15 @@ $toko = $db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray();
           </a>
         </div>
 
+        <div class="nav-item">
+          <a href="#" class="nav-link" data-toggle="modal" data-target="#updateInformasi">
+            <i class="nav-icon fas fa-truck"></i>
+            <p>
+              Ganti Informasi Pengiriman
+            </p>
+          </a>
+        </div>
+
         <li class="nav-item bg-success">
           <a href="https://wa.me/<?= $toko['kontak']; ?>" target="_blank" rel="noreferrer" class="nav-link">
             <i class="nav-icon fab fa-whatsapp"></i>
@@ -118,6 +128,56 @@ $toko = $db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray();
             <label for="">Konfirmasi Password Baru</label> <br>
             <div class="col-sm-12">
               <input type="password" name="conf" id="" class="form-control">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+          <button type="submit" class="btn btn-warning">Ubah</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="updateInformasi" tabindex="-1" role="dialog" aria-labelledby="uploadLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="penyerahanDesainLabel">Update Informasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="<?= base_url('Panel/UpdateInformasi'); ?>" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Kota/Kabupaten</label> <br>
+            <div class="col-sm-12">
+              <select name="id_ongkir" id="" class="form-control">
+                <?php foreach ($ongkir as $item): ?>
+                  <option <?= ($item['id_ongkir'] == session()->get('id_ongkir')) ? 'selected' : '' ?>
+                    value="<?= $item['id_ongkir']; ?>">
+                    <?= $item['nama_kota'] ?>
+                  </option>
+                <?php endforeach ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="">Kecamatan/Desa</label> <br>
+            <div class="col-sm-12">
+              <input type="text" name="kec_desa" id="" class="form-control" value="<?= session()->get('kec_desa'); ?>">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="">Alamat Lengkap</label> <br>
+            <div class="col-sm-12">
+              <input type="text" name="alamat" id="" class="form-control" value="<?= session()->get('alamat'); ?>">
             </div>
           </div>
 

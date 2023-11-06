@@ -14,5 +14,6 @@ class Seed extends Seeder
         $this->call('InformasiToko');
         $this->call('Transaksi');
         $this->call('Pemilik');
+        $this->call('Ongkir');
     }
 }

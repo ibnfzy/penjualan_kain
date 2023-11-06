@@ -46,7 +46,9 @@ class UserLogin extends BaseController
                     'alamat_customer' => $data['alamat'],
                     'nomor_hp' => $data['nomor_hp'],
                     'kota_kab' => $data['kota_kab'],
-                    'kec_desa' => $data['kec_desa']
+                    'kec_desa' => $data['kec_desa'],
+                    'id_ongkir' => $data['id_ongkir'],
+                    'alamat' => $data['alamat']
                 ];
 
                 $session->set($sessionData);
@@ -76,7 +78,9 @@ class UserLogin extends BaseController
 
     public function signup()
     {
-        return view('login/user_signup');
+        return view('login/user_signup', [
+            'ongkir' => $this->db->table('ongkir')->get()->getResultArray()
+        ]);
     }
 
     public function save_data()
@@ -89,12 +93,14 @@ class UserLogin extends BaseController
             'alamat' => 'required',
             'nomor_hp' => 'required|max_length[13]',
             'kota_kab' => 'required',
-            'kec_desa' => 'required'
+            'kec_desa' => 'required',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->to(base_url('Daftar'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
         }
+
+        $getKota = $this->db->table('ongkir')->where('id_ongkir', $this->request->getPost('kota_kab'))->get()->getRowArray();
 
         $data = [
             'username' => $this->request->getPost('username'),
@@ -102,8 +108,9 @@ class UserLogin extends BaseController
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'alamat' => $this->request->getPost('alamat'),
             'nomor_hp' => $this->request->getPost('nomor_hp'),
-            'kota_kab' => $this->request->getPost('kota_kab'),
-            'kec_desa' => $this->request->getPost('kec_desa')
+            'kota_kab' => $getKota['nama_kota'],
+            'kec_desa' => $this->request->getPost('kec_desa'),
+            'id_ongkir' => $this->request->getPost('kota_kab')
         ];
 
         $this->db->table('customer')->insert($data);

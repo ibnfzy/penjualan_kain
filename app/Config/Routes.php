@@ -45,6 +45,11 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteC
   $routes->get('LaporanTransaksi', 'AdmController::laporan_transaksi');
   $routes->post('LaporanTransaksi/render', 'AdmController::render_laporan_transaksi');
 
+  $routes->get('Ongkir', 'Ongkir::index');
+  $routes->get('Ongkir/(:num)', 'Ongkir::delete/$1');
+  $routes->post('Ongkir', 'Ongkir::create');
+  $routes->post('Ongkir/Edit', 'Ongkir::update');
+
   $routes->get('Produk', 'Produk::index');
   $routes->get('Produk/Tambah', 'Produk::new');
   $routes->post('Produk/Tambah', 'Produk::create');
@@ -65,6 +70,7 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteColle
   $routes->get('/', 'UserController::index');
 
   $routes->post('UpdatePassword', 'UserController::updatePassword');
+  $routes->post('UpdateInformasi', 'UserController::updateInformasi');
 
   $routes->get('Cart/Simpan', 'UserController::simpan_keranjang');
   $routes->get('Cart', 'UserController::keranjang');

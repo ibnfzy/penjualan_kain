@@ -81,7 +81,13 @@
           </div>
 
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Kota/Kabupaten" name="kota_kab">
+            <select name="kota_kab" id="" class="form-control">
+              <?php foreach ($ongkir as $item): ?>
+                <option value="<?= $item['id_ongkir']; ?>">
+                  <?= $item['nama_kota']; ?>
+                </option>
+              <?php endforeach ?>
+            </select>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>

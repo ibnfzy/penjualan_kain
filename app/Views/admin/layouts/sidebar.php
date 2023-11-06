@@ -31,6 +31,15 @@
         </li>
 
         <li class="nav-item">
+          <a href="<?= base_url('AdmPanel/Ongkir'); ?>" class="nav-link">
+            <i class="nav-icon fas fa-truck"></i>
+            <p>
+              Ongkos Kirim
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a href="<?= base_url('AdmPanel/Corousel'); ?>" class="nav-link">
             <i class="nav-icon fas fa-images"></i>
             <p>

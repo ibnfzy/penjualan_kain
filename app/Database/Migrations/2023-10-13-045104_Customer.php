@@ -13,6 +13,9 @@ class Customer extends Migration
                 'type' => 'INT',
                 'auto_increment' => true
             ],
+            'id_ongkir' => [
+                'type' => 'INT'
+            ],
             'fullname' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50

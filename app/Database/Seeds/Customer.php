@@ -15,7 +15,8 @@ class Customer extends Seeder
             'alamat' => 'Jl Toddopuli',
             'kota_kab' => 'Makassar',
             'kec_desa' => 'Manggala',
-            'nomor_hp' => '6285158668102'
+            'nomor_hp' => '6285158668102',
+            'id_ongkir' => 1
         ]);
     }
 }

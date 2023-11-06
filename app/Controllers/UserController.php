@@ -157,11 +157,21 @@ class UserController extends BaseController
                 $q++;
             }
 
+            $total_harga = array_sum($hargaarr);
+
+            if (count($get) >= 10) {
+                $total_harga = array_sum($hargaarr) - (array_sum($hargaarr) * (20 / 100));
+            } else if (count($get) >= 7) {
+                $total_harga = array_sum($hargaarr) - (array_sum($hargaarr) * (10 / 100));
+            } else if (count($get) >= 5) {
+                $total_harga = array_sum($hargaarr) - (array_sum($hargaarr) * (5 / 100));
+            }
+
             $dataTransaksi = [
                 'uid' => $uid,
                 'id_customer' => session()->get('id_customer'),
                 'total_produk' => count($get),
-                'total_bayar' => array_sum($hargaarr),
+                'total_bayar' => $total_harga,
                 'batas_pembayaran' => date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 Days')),
                 'status_transaksi' => 'Menunggu Bukti Pembayaran'
             ];
@@ -341,6 +351,30 @@ class UserController extends BaseController
 
         $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->update([
             'password' => password_hash($this->request->getPost('new'), PASSWORD_DEFAULT),
+        ]);
+
+        return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
+    }
+
+    public function updateInformasi()
+    {
+        $rules = [
+            'id_ongkir' => 'required',
+            'kec_desa' => 'required',
+            'alamat' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('Panel'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
+        }
+
+        $get = $this->db->table('ongkir')->where('id_ongkir', $this->request->getPost('id_ongkir'))->get()->getRowArray();
+
+        $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->update([
+            'id_ongkir' => $get['id_ongkir'],
+            'kota_kab' => $get['nama_kota'],
+            'kec_desa' => $this->request->getPost('kec_desa'),
+            'alamat' => $this->request->getPost('alamat'),
         ]);
 
         return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
