@@ -52,6 +52,11 @@ class Home extends BaseController
 
     public function cart()
     {
+        if (!session()->get('logged_in_customer')) {
+            return redirect()->to(previous_url())->with('type-status', 'error')->with('message', 'Silahkan Login terdahulu sebelum mengakses halaman keranjang');
+            ;
+        }
+
         return view('web/cart');
     }
 
