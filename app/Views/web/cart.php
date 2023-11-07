@@ -68,6 +68,16 @@ $diskon = 0;
       </div>
       <?php endif ?>
 
+      <?php if ($notice_delete) : ?>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Pemberitahuan!</strong> Kuantitas produk pada keranjangmu melebihi stok produk, dan automatis terhapus,
+        silahkan tambahkan ulang produk
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <?php endif ?>
+
     </div>
     <form action="<?= base_url('Cart/Update'); ?>" method="post">
       <div class="row">

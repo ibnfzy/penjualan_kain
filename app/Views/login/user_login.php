@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="<?= base_url('') ?>plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url('') ?>dist/css/adminlte.min.css">
+
+  <link rel="stylesheet" href="<?= base_url() ?>/node_modules/sweetalert2/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="<?= base_url() ?>/node_modules/toastr/build/toastr.min.css">
 </head>
 
 <body class="hold-transition login-page bg-gradient-orange">
@@ -68,9 +71,44 @@
   <!-- jQuery -->
   <script src="<?= base_url('') ?>plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
+  <script src="<?= base_url(); ?>/node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+  <script src="<?= base_url() ?>/node_modules/toastr/build/toastr.min.js"></script>
   <script src="<?= base_url('') ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?= base_url('') ?>dist/js/adminlte.min.js"></script>
+
+  <script>
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+  </script>
+
+  <?php
+  if (session()->getFlashdata('dataMessage')) {
+    foreach (session()->getFlashdata('dataMessage') as $item) {
+      echo '<script>toastr["' .
+        session()->getFlashdata('type-status') . '"]("' . $item . '")</script>';
+    }
+  }
+  if (session()->getFlashdata('message')) {
+    echo '<script>toastr["' .
+      session()->getFlashdata('type-status') . '"]("' . session()->getFlashdata('message') . '")</script>';
+  }
+  ?>
 </body>
 
 </html>

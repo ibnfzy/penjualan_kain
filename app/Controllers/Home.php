@@ -52,12 +52,29 @@ class Home extends BaseController
 
     public function cart()
     {
+        $notice = false;
         if (!session()->get('logged_in_customer')) {
             return redirect()->to(previous_url())->with('type-status', 'error')->with('message', 'Silahkan Login terdahulu sebelum mengakses halaman keranjang');
             ;
         }
 
-        return view('web/cart');
+        foreach ($this->cart->contents() as $item) {
+            $get = $this->db->table('produk_detail')->where('id_produk_detail', $item['id'])->get()->getRowArray();
+
+            if ($get['stok_produk'] < $item['qty']) {
+                $this->remove_barang($item['rowid']);
+                $notice = true;
+            } else {
+                $this->cart->update([
+                    'rowid' => $item['rowid'],
+                    'stok' => $get['stok_produk']
+                ]);
+            }
+        }
+
+        return view('web/cart', [
+            'notice_delete' => $notice
+        ]);
     }
 
     public function add_barang()

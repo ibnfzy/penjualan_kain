@@ -143,6 +143,11 @@ class UserController extends BaseController
             foreach ($this->cart->contents() as $item) {
                 $produk = $this->db->table('produk_detail')->where('id_produk_detail', $item['id'])->get()->getRowArray();
 
+                if ($produk['stok_produk'] < $item['qty']) {
+                    return redirect()->to(base_url('Cart'))->with('type-status', 'error')
+                        ->with('message', 'Terdapat Stok kurang pada keranjang anda, silahkan ditambahkan ulang');
+                }
+
                 $get[] = $produk;
                 $get[$q]['nama_produk'] = $item['name'];
                 $get[$q]['qty'] = $item['qty'];

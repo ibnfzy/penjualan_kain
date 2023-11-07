@@ -29,7 +29,7 @@ $routes->post('Own/Login', 'OwnLogin::auth');
 $routes->get('Login', 'UserLogin::index');
 $routes->post('Login', 'UserLogin::auth');
 $routes->get('Daftar', 'UserLogin::signup');
-$routes->post('Daftar', 'UserLogin::save');
+$routes->post('Daftar', 'UserLogin::save_data');
 $routes->get('Logout', 'UserLogin::logoff');
 
 $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteCollection $routes) {
