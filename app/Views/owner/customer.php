@@ -16,7 +16,6 @@
               <th>No.</th>
               <th>ID Customer</th>
               <th>Nama Customer</th>
-              <th>Jenis Customer</th>
               <th>Total Transaksi</th>
               <th>Total Produk Yang dibeli</th>
               <th>Tanggal Transaksi Terakhir</th>
@@ -50,9 +49,6 @@
                 </td>
                 <td>
                   <?= $item['fullname']; ?>
-                </td>
-                <td>
-                  <?= $jenis; ?>
                 </td>
                 <td>
                   <?= $total; ?>

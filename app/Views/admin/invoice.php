@@ -64,13 +64,13 @@ $diskon = 0;
               <?= $dataUser['fullname']; ?>
             </strong><br>
             Alamat Lengkap :
-            <?= $dataUser['alamat']; ?><br>
+            <?= $dataTransaksi['alamat']; ?><br>
             Kota/Kabupaten - Kecamatan/Desa :
-            <?= $dataUser['kota_kab'] . ' - ' . $dataUser['kec_desa']; ?><br>
+            <?= $dataTransaksi['kota_kab'] . ' - ' . $dataUser['kec_desa']; ?><br>
             Alamat Pengiriman :
-            <?= $dataUser['alamat']; ?><br>
+            <?= $dataTransaksi['alamat']; ?><br>
             Kontak :
-            <?= $dataUser['nomor_hp']; ?>
+            <?= $dataTransaksi['nomor_hp']; ?>
           </address>
         </div>
         <!-- /.col -->
@@ -259,6 +259,8 @@ $diskon = 0;
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
         <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
+        <a href="<?= base_url('AdmPanel/Hapus/' . $item['id_transaksi']); ?>" class="btn btn-danger">Batalkan
+          Transaksi</a>
         <a href="<?= base_url('AdmPanel/Validasi/' . $item['id_transaksi']); ?>" class="btn btn-primary">Validasi Bukti
           Bayar Ini</a>
         <?php endif ?>

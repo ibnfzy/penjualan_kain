@@ -12,6 +12,8 @@ class AdmController extends BaseController
     public function __construct()
     {
         $this->db = \Config\Database::connect();
+
+        session()->set("total_transaksi", count($this->db->table('transaksi')->where('status_transaksi', 'Menunggu Bukti Pembayaran')->orWhere('status_transaksi', 'Menunggu Validasi Bukti Bayar')->get()->getResultArray()));
     }
 
     public function index()
@@ -133,9 +135,18 @@ class AdmController extends BaseController
         }
 
         return view('admin/render_laporan_transaksi', [
-            'data' => $this->db->table('transaksi')->like('tgl_checkout', $where, 'right')->orderBy('id_transaksi', 'DESC')->get()->getResultArray(),
+            'data' => $this->db->table('transaksi')->where('status_transaksi', 'Pesanan berhasil diterima oleh pemesan')->like('tgl_checkout', $where, 'right')->orderBy('id_transaksi', 'DESC')->get()->getResultArray(),
             'type' => $type,
             'date' => $date
         ]);
+    }
+
+    public function hapus_transaksi($id)
+    {
+        $this->db->table('transaksi')->where('id_transaksi', $id)->delete();
+        $this->db->table('transaksi_detail')->where('id_transaksi', $id)->delete();
+
+        return redirect()->to(base_url('AdmPanel/Transaksi'))->with('type-status', 'success')
+            ->with('message', 'Transaksi Berhasil terhapus');
     }
 }

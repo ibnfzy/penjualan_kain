@@ -44,6 +44,7 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteC
   $routes->get('Customer', 'AdmController::customer');
   $routes->get('LaporanTransaksi', 'AdmController::laporan_transaksi');
   $routes->post('LaporanTransaksi/render', 'AdmController::render_laporan_transaksi');
+  $routes->get('Hapus/(:num)', 'AdmController::hapus_transaksi/$1');
 
   $routes->get('Ongkir', 'Ongkir::index');
   $routes->get('Ongkir/(:num)', 'Ongkir::delete/$1');
@@ -69,6 +70,8 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteColle
 
   $routes->get('/', 'UserController::index');
 
+  $routes->get('Hapus/(:num)', 'UserController::hapus_transaksi/$1');
+
   $routes->post('UpdatePassword', 'UserController::updatePassword');
   $routes->post('UpdateInformasi', 'UserController::updateInformasi');
 
@@ -93,5 +96,6 @@ $routes->group('OwnPanel', ['namespace' => 'App\Controllers'], function (RouteCo
   $routes->get('/', 'OwnController::index');
   $routes->get('Customer', 'OwnController::customer');
   $routes->post('render', 'OwnController::render_laporan_transaksi');
+  $routes->get('Testimoni', 'OwnController::testimoni');
 
 });

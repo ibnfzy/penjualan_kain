@@ -22,6 +22,7 @@
               <th>Batas Pembayaran</th>
               <th>Status Transaksi</th>
               <th>Hubungi Customer</th>
+              <th>Hapus Transaksi</th>
               <th>Invoice</th>
             </tr>
           </thead>
@@ -57,8 +58,10 @@
                 </td>
                 <td><a href="https://wa.me/<?= $get['nomor_hp'] ?>" class="btn btn-success"><i
                       class="fab fa-whatsapp"></i> Hubungi Customer</a></td>
+                <td><a href="<?= base_url('AdmPanel/Hapus/' . $item['id_transaksi']); ?>" class="btn btn-danger">Hapus</a>
+                </td>
                 <td><a href="<?= base_url('AdmPanel/Transaksi/' . $item['id_transaksi'] . '/' . $item['id_customer']); ?>"
-                    class="btn btn-danger">Invoice</a></td>
+                    class="btn btn-info">Invoice</a></td>
               </tr>
             <?php endforeach ?>
           </tbody>

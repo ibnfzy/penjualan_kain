@@ -43,7 +43,7 @@ class OwnController extends BaseController
         }
 
         return view('admin/render_laporan_transaksi', [
-            'data' => $this->db->table('transaksi')->like('tgl_checkout', $where, 'right')->orderBy('id_transaksi', 'DESC')->get()->getResultArray(),
+            'data' => $this->db->table('transaksi')->where('status_transaksi', 'Pesanan berhasil diterima oleh pemesan')->like('tgl_checkout', $where, 'right')->orderBy('id_transaksi', 'DESC')->get()->getResultArray(),
             'type' => $type,
             'date' => $date
         ]);
@@ -53,6 +53,13 @@ class OwnController extends BaseController
     {
         return view('owner/customer', [
             'data' => $this->db->table('customer')->get()->getResultArray()
+        ]);
+    }
+
+    public function testimoni()
+    {
+        return view('owner/testimoni', [
+            'data' => $this->db->table('review')->get()->getResultArray()
         ]);
     }
 }

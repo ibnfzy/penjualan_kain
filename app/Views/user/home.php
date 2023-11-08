@@ -43,22 +43,5 @@ if ($total <= 1) {
     <!-- /.info-box -->
   </div>
   <!-- /.col -->
-  <!-- /.col -->
-
-  <div class="col-md-3 col-sm-6 col-12">
-    <div class="info-box shadow">
-      <span class="info-box-icon bg-warning"><i class="fas fa-user"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">Jenis Pelanggan</span>
-        <span class="info-box-number">
-          <?= $jenis; ?>
-        </span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
 </div>
 <?= $this->endSection(); ?>

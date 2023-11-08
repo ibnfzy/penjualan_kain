@@ -178,7 +178,12 @@ class UserController extends BaseController
                 'total_produk' => count($get),
                 'total_bayar' => $total_harga,
                 'batas_pembayaran' => date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 Days')),
-                'status_transaksi' => 'Menunggu Bukti Pembayaran'
+                'status_transaksi' => 'Menunggu Bukti Pembayaran',
+                'id_ongkir' => session()->get('id_ongkir'),
+                'alamat' => session()->get('alamat'),
+                'kota_kab' => session()->get('kota_kab'),
+                'kec_desa' => session()->get('kec_desa'),
+                'nomor_hp' => session()->get('nomor_hp')
             ];
 
             $this->db->table('transaksi')->insert($dataTransaksi);
@@ -230,7 +235,7 @@ class UserController extends BaseController
             $this->request->getFile('gambar')->move('uploads', $filename);
         }
 
-        return redirect()->to(previous_url())->with('type-status', 'success')
+        return redirect()->to(base_url('Panel/Transaksi/' . $id))->with('type-status', 'success')
             ->with('message', 'Bukti pembayaran berhasil diupload');
     }
 
@@ -240,7 +245,7 @@ class UserController extends BaseController
             'status_transaksi' => 'Pesanan berhasil diterima oleh pemesan'
         ]);
 
-        return redirect()->to(previous_url())->with('type-status', 'success')
+        return redirect()->to(base_url('Panel/Transaksi/' . $id))->with('type-status', 'success')
             ->with('message', 'Pesanan berhasil dikirim');
     }
 
@@ -382,6 +387,23 @@ class UserController extends BaseController
             'alamat' => $this->request->getPost('alamat'),
         ]);
 
+        session()->set([
+            'id_ongkir' => $get['id_ongkir'],
+            'kota_kab' => $get['nama_kota'],
+            'kec_desa' => $this->request->getPost('kec_desa'),
+            'alamat' => $this->request->getPost('alamat'),
+            'alamat_customer' => $this->request->getPost('alamat'),
+        ]);
+
         return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
+    }
+
+    public function hapus_transaksi($id)
+    {
+        $this->db->table('transaksi')->where('id_transaksi', $id)->delete();
+        $this->db->table('transaksi_detail')->where('id_transaksi', $id)->delete();
+
+        return redirect()->to(base_url('Panel/Transaksi'))->with('type-status', 'success')
+            ->with('message', 'Transaksi Berhasil terhapus');
     }
 }

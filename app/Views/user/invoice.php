@@ -13,20 +13,20 @@ $diskon = 0;
 <div class="row">
   <div class="col-12">
     <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-    <div class="alert alert-warning alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-      Silahkan lakukan pembayaran secepat mungkin, sebelum tanggal batas pembayaran.
-    </div>
+      <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
+        Silahkan lakukan pembayaran secepat mungkin, sebelum tanggal batas pembayaran.
+      </div>
     <?php endif ?>
 
     <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
-    <div class="alert alert-info alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
-      Silahkan menunggu admin untuk memvalidasi bukti bayar anda, silahkan menghubungi toko untuk informasi lebih
-      lanjut.
-    </div>
+      <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
+        Silahkan menunggu admin untuk memvalidasi bukti bayar anda, silahkan menghubungi toko untuk informasi lebih
+        lanjut.
+      </div>
     <?php endif ?>
 
 
@@ -64,13 +64,13 @@ $diskon = 0;
               <?= $dataUser['fullname']; ?>
             </strong><br>
             Alamat Lengkap :
-            <?= $dataUser['alamat']; ?><br>
+            <?= $dataTransaksi['alamat']; ?><br>
             Kota/Kabupaten - Kecamatan/Desa :
-            <?= $dataUser['kota_kab'] . ' - ' . $dataUser['kec_desa']; ?><br>
+            <?= $dataTransaksi['kota_kab'] . ' - ' . $dataTransaksi['kec_desa']; ?><br>
             Alamat Pengiriman :
-            <?= $dataUser['alamat']; ?><br>
+            <?= $dataTransaksi['alamat']; ?><br>
             Kontak :
-            <?= $dataUser['nomor_hp']; ?>
+            <?= $dataTransaksi['nomor_hp']; ?>
           </address>
         </div>
         <!-- /.col -->
@@ -106,30 +106,30 @@ $diskon = 0;
             <tbody>
               <?php $i = 1;
               foreach ($dataDetail as $item): ?>
-              <?php $total[] = $item['subtotal']; ?>
-              <tr>
-                <td>
-                  <?= $i++; ?>
-                </td>
-                <td>
-                  <?= $item['id_produk']; ?>
-                </td>
-                <td>
-                  <?= $item['nama_produk']; ?>
-                </td>
-                <td>
-                  <?= $item['label_varian']; ?>
-                </td>
-                <td>
-                  <?= $item['kuantitas_produk']; ?>
-                </td>
-                <td>Rp
-                  <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
-                </td>
-                <td>Rp
-                  <?= number_format($item['subtotal'], 0, ',', '.') ?>
-                </td>
-              </tr>
+                <?php $total[] = $item['subtotal']; ?>
+                <tr>
+                  <td>
+                    <?= $i++; ?>
+                  </td>
+                  <td>
+                    <?= $item['id_produk']; ?>
+                  </td>
+                  <td>
+                    <?= $item['nama_produk']; ?>
+                  </td>
+                  <td>
+                    <?= $item['label_varian']; ?>
+                  </td>
+                  <td>
+                    <?= $item['kuantitas_produk']; ?>
+                  </td>
+                  <td>Rp
+                    <?= number_format($item['harga_produk'], 0, ',', '.'); ?>
+                  </td>
+                  <td>Rp
+                    <?= number_format($item['subtotal'], 0, ',', '.') ?>
+                  </td>
+                </tr>
               <?php endforeach ?>
             </tbody>
           </table>
@@ -225,10 +225,10 @@ $diskon = 0;
         <div class="col-12">
           <a href="#" onclick="window.print()" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
           <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
-          <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
-              class="fas fa-upload"></i> Upload Bukti
-            Bayar
-          </button>
+            <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
+                class="fas fa-upload"></i> Upload Bukti
+              Bayar
+            </button>
           <?php endif ?>
         </div>
       </div>
