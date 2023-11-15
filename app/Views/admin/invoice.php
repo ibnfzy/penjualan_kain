@@ -4,6 +4,7 @@
 
 <?php
 $total = [];
+$totalKuantitasi = [];
 $db = \Config\Database::connect();
 $ongkir = $db->table('ongkir')->where('id_ongkir', $dataUser['id_ongkir'])->get()->getRowArray();
 
@@ -106,7 +107,10 @@ $diskon = 0;
             <tbody>
               <?php $i = 1;
               foreach ($dataDetail as $item): ?>
-              <?php $total[] = $item['subtotal']; ?>
+              <?php 
+                $total[] = $item['subtotal'];
+                $totalKuantitasi[] = $item['kuantitas_produk'];
+                ?>
               <tr>
                 <td>
                   <?= $i++; ?>
@@ -142,18 +146,19 @@ $diskon = 0;
       $total_harga = array_sum($total);
       $total_bayar = $total_harga + $ongkir['biaya_ongkir'];
       $total_diskon = 0;
+      $total_produk = array_sum($totalKuantitasi);
 
-      if ($dataTransaksi['total_produk'] >= 10) {
+      if ($total_produk >= 10) {
         $diskon = 20;
         $total_diskon = $total_harga * (20 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
 
-      } else if ($dataTransaksi['total_produk'] >= 7) {
+      } else if ($total_produk >= 7) {
         $diskon = 10;
         $total_diskon = $total_harga * (10 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
 
-      } else if ($dataTransaksi['total_produk'] >= 5) {
+      } else if ($total_produk >= 5) {
         $diskon = 5;
         $total_diskon = $total_harga * (5 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];

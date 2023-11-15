@@ -7,6 +7,14 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+$routes->get('daily-cj', function () {
+  $db = \Config\Database::connect();
+
+  $db->table('transaksi')->where('batas_pembayaran <', date('Y-m-d'))->where('bukti_bayar', null)->update([
+    'status_transaksi' => 'GAGAL'
+  ]);
+});
+
 $routes->get('Katalog', 'Home::katalog');
 $routes->get('Katalog/(:num)', 'Home::detail/$1');
 
