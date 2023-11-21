@@ -15,6 +15,8 @@ $routes->get('daily-cj', function () {
   ]);
 });
 
+$routes->get('timer/(:num)', 'UserController::transaksi_gagal/$1');
+
 $routes->get('Katalog', 'Home::katalog');
 $routes->get('Katalog/(:num)', 'Home::detail/$1');
 

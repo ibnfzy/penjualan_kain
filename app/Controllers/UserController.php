@@ -406,4 +406,13 @@ class UserController extends BaseController
         return redirect()->to(base_url('Panel/Transaksi'))->with('type-status', 'success')
             ->with('message', 'Transaksi Berhasil terhapus');
     }
+
+    public function transaksi_gagal($id)
+    {
+        $this->db->table('transaksi')->where('id_transaksi', $id)->update([
+            'status_transaksi' => 'GAGAL'
+        ]);
+
+        return $this->response->setJSON('Transaksi Gagal');
+    }
 }
