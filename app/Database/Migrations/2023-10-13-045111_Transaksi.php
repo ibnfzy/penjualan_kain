@@ -20,9 +20,6 @@ class Transaksi extends Migration
             'id_customer' => [
                 'type' => 'INT'
             ],
-            'id_ongkir' => [
-                'type' => 'INT'
-            ],
             'total_produk' => [
                 'type' => 'INT'
             ],
@@ -44,20 +41,7 @@ class Transaksi extends Migration
                 'type' => 'VARCHAR',
                 'default' => 'Menunggu Bukti Pembayaran',
                 'constraint' => 255
-            ],
-            'alamat' => [
-                'type' => 'TEXT'
-            ],
-            'kota_kab' => [
-                'type' => 'TEXT'
-            ],
-            'kec_desa' => [
-                'type' => 'TEXT'
-            ],
-            'nomor_hp' => [
-                'type' => 'VARCHAR',
-                'constraint' => 13
-            ],
+            ]
         ]);
 
         $this->forge->addKey('id_transaksi', true);

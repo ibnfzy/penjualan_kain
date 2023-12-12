@@ -10,7 +10,7 @@ $routes->get('/', 'Home::index');
 $routes->get('daily-cj', function () {
   $db = \Config\Database::connect();
 
-  $db->table('transaksi')->where('batas_pembayaran <', date('Y-m-d'))->where('bukti_bayar', null)->update([
+  $db->table('transaksi')->where('batas_pembayaran <=', date('Y-m-d'))->where('bukti_bayar', null)->update([
     'status_transaksi' => 'GAGAL'
   ]);
 });
@@ -51,10 +51,15 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteC
   $routes->get('Transaksi/(:segment)/(:segment)', 'AdmController::invoice/$1/$2');
   $routes->get('Validasi/(:num)', 'AdmController::validasi/$1');
   $routes->get('Kirim/(:num)', 'AdmController::kirim/$1');
+  $routes->get('Hapus/(:num)', 'AdmController::hapus_transaksi/$1');
+  $routes->post('Transaksi/Tambah', 'AdmController::proses_transaksi');
+  $routes->post('Transaksi/TambahProduk/(:num)/(:num)', 'AdmController::tambah_produk_transaksi/$1/$2');
+  $routes->get('Selesai/(:num)', 'AdmController::transaksi_selesai/$1');
+
   $routes->get('Customer', 'AdmController::customer');
+
   $routes->get('LaporanTransaksi', 'AdmController::laporan_transaksi');
   $routes->post('LaporanTransaksi/render', 'AdmController::render_laporan_transaksi');
-  $routes->get('Hapus/(:num)', 'AdmController::hapus_transaksi/$1');
 
   $routes->get('Ongkir', 'Ongkir::index');
   $routes->get('Ongkir/(:num)', 'Ongkir::delete/$1');
@@ -63,7 +68,7 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteC
 
   $routes->get('Produk', 'Produk::index');
   $routes->get('Produk/Tambah', 'Produk::new');
-  $routes->post('Produk/Tambah', 'Produk::create');
+  $routes->post('Produk/Tambah/Simpan', 'Produk::create');
   $routes->post('Produk/Tambah/Varian', 'Produk::tambah_varian');
   $routes->get('Produk/Hapus/(:num)', 'Produk::delete/$1');
   $routes->get('Produk/Detail/(:num)', 'Produk::getDetail/$1');
@@ -79,7 +84,6 @@ $routes->group('AdmPanel', ['namespaces' => 'App\Controllers'], function (RouteC
 $routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteCollection $routes) {
 
   $routes->get('/', 'UserController::index');
-
   $routes->get('Hapus/(:num)', 'UserController::hapus_transaksi/$1');
 
   $routes->post('UpdatePassword', 'UserController::updatePassword');
@@ -87,7 +91,7 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteColle
 
   $routes->get('Cart/Simpan', 'UserController::simpan_keranjang');
   $routes->get('Cart', 'UserController::keranjang');
-  $routes->get('Cart/Delete/(:num)', 'UserController::hapus_keranjang');
+  $routes->get('Cart/Delete/(:segment)', 'UserController::hapus_keranjang/$1 ');
   $routes->get('Cart/(:segment)', 'UserController::proses_keranjang/$1');
 
   $routes->get('Transaksi', 'UserController::transaksi');
@@ -95,7 +99,7 @@ $routes->group('Panel', ['namespace' => 'App\Controllers'], function (RouteColle
   $routes->post('Transaksi/(:num)', 'UserController::upload_bukti/$1');
   $routes->get('Konfirmasi/(:num)', 'UserController::konfirmasi_pesanan/$1');
 
-  $routes->get('Checkout', 'UserController::checkout');
+  $routes->post('Checkout', 'UserController::checkout');
 
   $routes->get('Testimoni', 'UserController::testimoni');
   $routes->post('Testimoni', 'UserController::testimoni_save');
@@ -107,5 +111,4 @@ $routes->group('OwnPanel', ['namespace' => 'App\Controllers'], function (RouteCo
   $routes->get('Customer', 'OwnController::customer');
   $routes->post('render', 'OwnController::render_laporan_transaksi');
   $routes->get('Testimoni', 'OwnController::testimoni');
-
 });

@@ -55,7 +55,7 @@ class OwnController extends BaseController
             'data' => $this->db->table('customer')->get()->getResultArray()
         ]);
     }
-
+    
     public function testimoni()
     {
         return view('owner/testimoni', [

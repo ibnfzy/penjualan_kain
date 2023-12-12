@@ -32,7 +32,9 @@ $home = new \App\Controllers\Home;
         <h1>Selamat Datang di website Pusat Sarung Tenun Mamasa</h1>
       </div>
       <div class="col-md-6">
-
+        <p class="text-white">
+            <?= $toko['tentang'] ?>
+        </p>
       </div>
     </div>
   </div>
@@ -43,7 +45,7 @@ $home = new \App\Controllers\Home;
 <div class="featured-product product">
   <div class="container-fluid">
     <div class="section-header">
-      <h1>Rekomendasi Produk</h1>
+      <h1>Produk Sarung Tenun Mamasa</h1>
     </div>
     <div class="row align-items-center product-slider product-slider-4">
       <?php foreach ($rekom as $item): ?>

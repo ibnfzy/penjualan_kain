@@ -42,6 +42,5 @@ if ($total <= 1) {
     </div>
     <!-- /.info-box -->
   </div>
-  <!-- /.col -->
 </div>
 <?= $this->endSection(); ?>

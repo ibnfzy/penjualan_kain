@@ -132,6 +132,7 @@ class UserController extends BaseController
         helper('text');
 
         $home = new Home;
+        $requestText = $this->request->getPost('request') ?? '';
 
         if (isset($_SESSION['logged_in_customer']) and $_SESSION['logged_in_customer'] == TRUE) {
             $q = 0;
@@ -183,7 +184,8 @@ class UserController extends BaseController
                 'alamat' => session()->get('alamat'),
                 'kota_kab' => session()->get('kota_kab'),
                 'kec_desa' => session()->get('kec_desa'),
-                'nomor_hp' => session()->get('nomor_hp')
+                'nomor_hp' => session()->get('nomor_hp'),
+                'pesan' => $requestText
             ];
 
             $this->db->table('transaksi')->insert($dataTransaksi);
@@ -235,7 +237,7 @@ class UserController extends BaseController
             $this->request->getFile('gambar')->move('uploads', $filename);
         }
 
-        return redirect()->to(base_url('Panel/Transaksi/' . $id))->with('type-status', 'success')
+        return redirect()->to(previous_url())->with('type-status', 'success')
             ->with('message', 'Bukti pembayaran berhasil diupload');
     }
 
@@ -245,7 +247,7 @@ class UserController extends BaseController
             'status_transaksi' => 'Pesanan berhasil diterima oleh pemesan'
         ]);
 
-        return redirect()->to(base_url('Panel/Transaksi/' . $id))->with('type-status', 'success')
+        return redirect()->to(previous_url())->with('type-status', 'success')
             ->with('message', 'Pesanan berhasil dikirim');
     }
 
@@ -351,7 +353,7 @@ class UserController extends BaseController
 
         $check = $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->get()->getRowArray();
 
-        if (!password_verify($this->request->getPost('old'), $check['password'])) {
+        if (!password_verify((string) $this->request->getPost('old'), $check['password'])) {
             return redirect()->to(base_url('Panel'))->with('type-status', 'error')->with('message', 'Password Lama Tidak Benar');
         }
 
@@ -360,7 +362,7 @@ class UserController extends BaseController
         }
 
         $this->db->table('customer')->where('id_customer', session()->get('id_customer'))->update([
-            'password' => password_hash($this->request->getPost('new'), PASSWORD_DEFAULT),
+            'password' => password_hash((string) $this->request->getPost('new'), PASSWORD_DEFAULT),
         ]);
 
         return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
@@ -395,7 +397,7 @@ class UserController extends BaseController
             'alamat_customer' => $this->request->getPost('alamat'),
         ]);
 
-        return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Password berhasil diperbarui');
+        return redirect()->to(base_url('Panel'))->with('type-status', 'success')->with('message', 'Informasi Pengiriman berhasil diperbarui');
     }
 
     public function hapus_transaksi($id)

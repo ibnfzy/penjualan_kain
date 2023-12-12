@@ -4,6 +4,7 @@
 
 <?php
 $total = [];
+$totalKuantitasi = [];
 $db = \Config\Database::connect();
 $ongkir = $db->table('ongkir')->where('id_ongkir', $dataUser['id_ongkir'])->get()->getRowArray();
 
@@ -12,14 +13,14 @@ $diskon = 0;
 
 <div class="row">
   <div class="col-12">
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
+    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran') : ?>
     <div class="alert alert-warning alert-dismissible">
       <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
       Silahkan lakukan pembayaran secepat mungkin, sebelum waktu habis <br> <span id="timer">0:00</span>
     </div>
     <?php endif ?>
 
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
+    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar') : ?>
     <div class="alert alert-info alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
@@ -78,8 +79,10 @@ $diskon = 0;
           <br>
           <b>ID Transaksi :</b>
           <?= $dataTransaksi['id_transaksi']; ?><br>
+          <!--
           <b>Batas Pembayaran :</b>
           <?= date('Y/m/d', strtotime($dataTransaksi['batas_pembayaran'])); ?> <br>
+          -->
           <b>Status Transaksi : </b>
           <?= $dataTransaksi['status_transaksi']; ?>
         </div>
@@ -104,8 +107,11 @@ $diskon = 0;
             </thead>
             <tbody>
               <?php $i = 1;
-              foreach ($dataDetail as $item): ?>
-              <?php $total[] = $item['subtotal']; ?>
+              foreach ($dataDetail as $item) : ?>
+              <?php
+                $total[] = $item['subtotal'];
+                $totalKuantitasi[] = $item['kuantitas_produk'];
+                ?>
               <tr>
                 <td>
                   <?= $i++; ?>
@@ -141,22 +147,20 @@ $diskon = 0;
       $total_harga = array_sum($total);
       $total_bayar = $total_harga + $ongkir['biaya_ongkir'];
       $total_diskon = 0;
+      $total_produk = array_sum($totalKuantitasi);
 
-      if ($dataTransaksi['total_produk'] >= 10) {
+      if ($total_produk >= 10) {
         $diskon = 20;
         $total_diskon = $total_harga * (20 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
-      } else if ($dataTransaksi['total_produk'] >= 7) {
+      } else if ($total_produk >= 7) {
         $diskon = 10;
         $total_diskon = $total_harga * (10 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
-      } else if ($dataTransaksi['total_produk'] >= 5) {
+      } else if ($total_produk >= 5) {
         $diskon = 5;
         $total_diskon = $total_harga * (5 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
       }
       ?>
 
@@ -168,6 +172,11 @@ $diskon = 0;
             <?= number_format($total_bayar, 0, ',', '.'); ?>
             ke BANK XYZ 123456789 A/N
             Novita
+          </p>
+          <hr>
+          <p class="text-black">
+            <span class="text-bold">Pesan untuk penjual</span> <br>
+            <?= $dataTransaksi['pesan']; ?>
           </p>
         </div>
         <!-- /.col -->
@@ -223,7 +232,7 @@ $diskon = 0;
       <div class="row no-print">
         <div class="col-12">
           <a href="#" onclick="window.print()" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-          <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
+          <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran') : ?>
           <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
               class="fas fa-upload"></i> Upload Bukti
             Bayar
@@ -279,7 +288,7 @@ function startTimerAndExecutePHP() {
   var duration = 600; // Set the timer duration in seconds
 
   // Check if there is a previously stored timer value
-  var storedTimer = localStorage.getItem('timer');
+  var storedTimer = localStorage.getItem('timer-<?= $dataTransaksi['id_transaksi'] ?>');
   if (storedTimer) {
     duration = parseInt(storedTimer, 10);
   }
@@ -294,7 +303,7 @@ function startTimerAndExecutePHP() {
     } else {
       updateTimer(duration); // Update the timer on the webpage
       // Save the current timer value in localStorage
-      localStorage.setItem('timer', duration.toString());
+      localStorage.setItem('timer-<?= $dataTransaksi['id_transaksi'] ?>', duration.toString());
     }
   }, 1000); // Update every second
 }
@@ -306,9 +315,9 @@ function executePHP() {
     if (xhr.readyState == 4 && xhr.status == 200) {
       console.log(xhr.responseText); // Log the response from the PHP script
       // Remove the saved timer value from localStorage after execution
-      localStorage.removeItem('timer');
+      localStorage.removeItem('timer-<?= $dataTransaksi['id_transaksi'] ?>');
 
-      location.reload()
+      location.reload();
     }
   };
   xhr.open('GET', '<?= base_url('timer/' . $dataTransaksi['id_transaksi']); ?>', true);
@@ -316,7 +325,7 @@ function executePHP() {
 }
 
 // Start the timer with a duration of 10 seconds
-<?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
+<?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran') : ?>
 startTimerAndExecutePHP();
 <?php endif ?>
 </script>

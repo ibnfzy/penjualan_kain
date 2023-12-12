@@ -31,7 +31,8 @@ $varian = session()->get('jumlah_varian') ?? 1;
   <div class="card-body">
     <div class="row">
       <div class="col-md-12">
-        <form action="<?= base_url('AdmPanel/Produk/Tambah'); ?>" enctype="multipart/form-data" method="POST">
+        <form action="<?= base_url('AdmPanel/Produk/Tambah/Simpan'); ?>" 
+        enctype="multipart/form-data" method="POST">
 
           <div class="row">
             <div class="col-md-6">
@@ -61,13 +62,13 @@ $varian = session()->get('jumlah_varian') ?? 1;
                 <div class="form-group">
                   <label for="">Warna Produk</label> <br>
                   <div class="col-sm-2">
-                    <input type="color" name="warna_produk[<?= $i; ?>]" class="form-control" id="">
+                    <input type="color" name="warna_produk[<?= $i; ?>]" class="form-control" id="" required>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label for="">Label Nama Warna</label> <br>
-                  <input type="text" name="label[<?= $i; ?>]" class="form-control">
+                  <input type="text" name="label[<?= $i; ?>]" class="form-control" required>
                 </div>
 
                 <div class="form-group">
@@ -76,18 +77,18 @@ $varian = session()->get('jumlah_varian') ?? 1;
                     <div class="input-group-prepend">
                       <span class="input-group-text">Rp</span>
                     </div>
-                    <input type="number" class="form-control" name="harga_produk[<?= $i; ?>]">
+                    <input type="number" class="form-control" name="harga_produk[<?= $i; ?>]" required>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label for="">Stok Produk</label>
-                  <input type="number" name="stok_produk[<?= $i; ?>]" class="form-control" id="">
+                  <input type="number" name="stok_produk[<?= $i; ?>]" class="form-control" id="" required>
                 </div>
 
                 <div class="form-group">
                   <label for="">Gambar Produk</label>
-                  <input type="file" name="gambar_produk[<?= $i; ?>]" class="form-control" accept="image/*">
+                  <input type="file" name="gambar_produk[<?= $i; ?>]" class="form-control" accept="image/*" required>
                 </div>
                 <hr style="height: 2px; background: black;">
               </div>

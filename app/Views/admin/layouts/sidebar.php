@@ -53,7 +53,7 @@
             <i class="nav-icon fas fa-shopping-cart"></i>
             <p>
               Transaksi
-
+              
               <span class="badge badge-info right">
                 <?= session()->get('total_transaksi'); ?>
               </span>

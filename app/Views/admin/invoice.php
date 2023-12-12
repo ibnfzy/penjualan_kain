@@ -13,7 +13,7 @@ $diskon = 0;
 
 <div class="row">
   <div class="col-12">
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran'): ?>
+    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Bukti Pembayaran') : ?>
     <div class="alert alert-warning alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
@@ -21,7 +21,7 @@ $diskon = 0;
     </div>
     <?php endif ?>
 
-    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
+    <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar') : ?>
     <div class="alert alert-info alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <h5><i class="icon fas fa-exclamation-triangle"></i> Info!</h5>
@@ -80,8 +80,10 @@ $diskon = 0;
           <br>
           <b>ID Transaksi :</b>
           <?= $dataTransaksi['id_transaksi']; ?><br>
+          <!--
           <b>Batas Pembayaran :</b>
           <?= date('Y/m/d', strtotime($dataTransaksi['batas_pembayaran'])); ?> <br>
+          -->
           <b>Status Transaksi : </b>
           <?= $dataTransaksi['status_transaksi']; ?>
         </div>
@@ -105,9 +107,15 @@ $diskon = 0;
               </tr>
             </thead>
             <tbody>
+              <?php if (count($dataDetail) == 0) : ?>
+              <tr>
+                <td colspan="7" align="center">DATA KOSONG</td>
+              </tr>
+              <?php endif ?>
+
               <?php $i = 1;
-              foreach ($dataDetail as $item): ?>
-              <?php 
+              foreach ($dataDetail as $item) : ?>
+              <?php
                 $total[] = $item['subtotal'];
                 $totalKuantitasi[] = $item['kuantitas_produk'];
                 ?>
@@ -152,17 +160,14 @@ $diskon = 0;
         $diskon = 20;
         $total_diskon = $total_harga * (20 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
       } else if ($total_produk >= 7) {
         $diskon = 10;
         $total_diskon = $total_harga * (10 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
       } else if ($total_produk >= 5) {
         $diskon = 5;
         $total_diskon = $total_harga * (5 / 100);
         $total_bayar = ($total_harga - $total_diskon) + $ongkir['biaya_ongkir'];
-
       }
       ?>
 
@@ -175,6 +180,14 @@ $diskon = 0;
             ke BANK XYZ 123456789 A/N
             Novita
           </p> -->
+          <p class="text-black">
+            <span class="text-bold">Pesan untuk penjual</span> <br>
+            <?php if ($dataTransaksi['pesan'] == '') : ?>
+            Kosong
+            <?php else : ?>
+            <?= $dataTransaksi['pesan']; ?>
+            <?php endif ?>
+          </p>
         </div>
         <!-- /.col -->
         <div class="col-6">
@@ -230,15 +243,26 @@ $diskon = 0;
         <div class="col-12">
           <a href="#" onclick="window.print()" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
 
-          <?php if ($dataTransaksi['bukti_bayar'] != null): ?>
+          <?php if ($dataTransaksi['bukti_bayar'] != null) : ?>
           <button data-toggle="modal" data-target="#upload" type="button" class="btn btn-success float-right"><i
               class="fas fa-eye"></i> Lihat Bukti Bayar
           </button>
           <?php endif ?>
 
-          <?php if ($dataTransaksi['status_transaksi'] == 'Pesanan sedang diproses'): ?>
+          <?php if ($dataTransaksi['status_transaksi'] == 'Pesanan sedang diproses') : ?>
           <a href="<?= base_url('AdmPanel/Kirim/' . $dataTransaksi['id_transaksi']); ?>"
             class="btn btn-success float-right mr-2"><i class="fas fa-truck-pickup"></i> Kirim Pesanan</a>
+          <?php endif ?>
+
+          <?php if ($dataTransaksi['status_transaksi'] == 'Transaksi Offline') : ?>
+          <?php if (count($dataDetail) != 0) : ?>
+          <a href="<?= base_url('AdmPanel/Selesai/' . $dataTransaksi['id_transaksi']); ?>"
+            class="btn btn-success float-right mr-2"><i class="fas fa-truck-pickup"></i> Selesaikan Pesanan</a>
+          <?php endif ?>
+
+          <button data-toggle="modal" data-target="#add" type="button" class="btn btn-success float-right mr-2">Tambah
+            Produk
+          </button>
           <?php endif ?>
         </div>
       </div>
@@ -263,13 +287,55 @@ $diskon = 0;
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-        <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar'): ?>
+        <?php if ($dataTransaksi['status_transaksi'] == 'Menunggu Validasi Bukti Bayar') : ?>
         <a href="<?= base_url('AdmPanel/Hapus/' . $item['id_transaksi']); ?>" class="btn btn-danger">Batalkan
           Transaksi</a>
         <a href="<?= base_url('AdmPanel/Validasi/' . $item['id_transaksi']); ?>" class="btn btn-primary">Validasi Bukti
           Bayar Ini</a>
         <?php endif ?>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="exampleModalLabel">Pilih Produk</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form
+        action="<?= base_url('AdmPanel/Transaksi/TambahProduk/' . $dataTransaksi['id_transaksi'] . '/' . $dataUser['id_customer']); ?>"
+        method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Produk</label>
+            <select name="id_produk_detail" id="" class="form-control">
+              <?php foreach ($produk as $item) : ?>
+              <?php $get = $db->table('produk')->where('id_produk', $item['id_produk'])->get()->getRowArray(); ?>
+              <option value="<?= $item['id_produk_detail']; ?>">
+                <?= $get['nama_produk'] . '/' . $item['label_warna_produk'] .
+                    ' | Rp' . number_format($item['harga_produk'], 0, ',', '.') ?>
+              </option>
+              <?php endforeach ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Kuantitas</label>
+            <input type="number" name="qty" class="form-control" id="" value="1">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+          <button class="btn btn-success" type="submit">Tambah</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

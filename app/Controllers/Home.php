@@ -18,6 +18,7 @@ class Home extends BaseController
         return view('web/home', [
             'rekom' => $this->db->table('produk')->orderBy('id_produk', 'RAND()')->get()->getResultArray(),
             'corousel' => $this->db->table('corousel')->orderBy('id_corousel', 'DESC')->get()->getResultArray(),
+            'toko' => $this->db->table('informasi_toko')->where('id_toko', 1)->get()->getRowArray()
         ]);
     }
 
@@ -80,7 +81,7 @@ class Home extends BaseController
     public function add_barang()
     {
         sleep(5);
-
+        
         $get = $this->db->table('produk_detail')->where('id_produk_detail', $this->request->getPost('id_produk_detail'))->get()->getRowArray();
 
         $getd = $this->db->table('produk')->where('id_produk', $get['id_produk'])->get()->getRowArray();

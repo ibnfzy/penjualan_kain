@@ -26,7 +26,7 @@ class Produk extends BaseController
         if (!session()->get('jumlah_varian')) {
             session()->set('jumlah_varian', 1);
         }
-
+        
         return view('admin/produk_add');
     }
 
@@ -50,7 +50,6 @@ class Produk extends BaseController
             'stok_produk' => 'required',
             'gambar_produk' => 'is_image[gambar_produk]'
         ];
-
 
         if (!$this->validate($rules)) {
             return redirect()->to(base_url('AdmPanel/Produk/Tambah'))->with('type-status', 'error')->with('dataMessage', $this->validator->getErrors());
