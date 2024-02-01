@@ -2,12 +2,12 @@
 
 ## Setup
 
-- Buat database Sql dengan nama 'penjualan_kain'
-- Lakukan migration database dengan 'php spark migrate' di root folder project
-- Jalankan seeder dengan 'php spark db:seed Seed'
-- Jalankan server dengan 'php spark serve'
+- Buat database Sql dengan nama `penjualan_kain`
+- Lakukan migration database dengan `php spark migrate` di root folder project
+- Jalankan seeder dengan `php spark db:seed Seed`
+- Jalankan server dengan `php spark serve`
 
-Setelah itu website penjualan kain ini sudah dapat kamu pakai, kamu cukup menjalankan 'php spark serve' setelah melakukan langka diatas 🆗
+Setelah itu website penjualan kain ini sudah dapat kamu pakai, kamu cukup menjalankan `php spark serve` setelah melakukan langka diatas 🆗
 
 ## Server Requirements
 
