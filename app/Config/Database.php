@@ -29,7 +29,7 @@ class Database extends Config
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'sip_novi',
+        'database' => 'penjualan_kain',
         'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
